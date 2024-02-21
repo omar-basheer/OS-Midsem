@@ -7,10 +7,14 @@
 #include<stdlib.h>
 
 
-/** A struct that models the page_table **/
+/** A struct that models the page_table
+ * A page table must be maintained for every process that is
+ * created**/
 struct page_table{
     int table[10][2];
 };
+
+//TODO implement page_table with the idea that every process has its own page table
 
 
 /** A function that insert a mapping into the page table **/
