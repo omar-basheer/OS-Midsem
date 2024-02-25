@@ -6,6 +6,7 @@ typedef struct{
     int process_id;
     int process_size;
     int process_request_limit;
+    //TODO implement request size
 
 } Process;
 

@@ -14,6 +14,11 @@ struct page_table{
     int table[10][2];
 };
 
+struct  PageTableEntry{
+    int frame_number;
+    int valid;
+}
+
 //TODO implement page_table with the idea that every process has its own page table
 
 
@@ -25,3 +30,5 @@ void insert_mapping(struct page_table obj*, int[]address){
 
     obj.table[page_number] = page_offset;
 }
+
+// Struct for a page table entry
