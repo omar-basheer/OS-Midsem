@@ -3,7 +3,8 @@
 
 int main(){
 
-    // main program goes here 
+    // main program goes here
+    srand(time(NULL));  
 
     return 0;
 }
