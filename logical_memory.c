@@ -9,12 +9,12 @@
 /** A struct that models the physical memory/ram of a computer
  *  In this isntance, the memory size is **/
 struct logical_memory{
-    int page_size = 8 //bytes
+    int page_size = 8; //bytes
     int no_of_blocks = 8 ;
     int m = 6;
     int n = 3;
 
-    int logical_space[no_of_pages][page_size] // 2D array to represent the logical address space
+    int logical_space[no_of_pages][page_size]; // 2D array to represent the logical address space
 };
 
 /** Converts a logical address to a page number **/
@@ -39,4 +39,4 @@ int[] logical_address_to_page(struct logical_memory *obj){
  * allocated to the process. The process cannot exceed this
  */
 
-//TODO implement mallow with above doc string
+//TODO implement malloc with above doc string
