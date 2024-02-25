@@ -21,9 +21,8 @@ Process* create_processes(int num_processes, int max_memory_size) {
     for (int i = 0; i < num_processes; i++) {
         processes[i].process_id = i;
         processes[i].process_size = generate_random_size(max_memory_size);
-        processes[i].process_request_limit = processes[i].process_size / 100; // Adjust request limit based on the size of the process
+        processes[i].process_request_limit = processes[i].process_size / 100; 
 
     }
-
     return processes;
 }
