@@ -6,7 +6,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<math.h>
-#include "processes.c"
+#include "processes.h"
 
 #define PAGE_SIZE 4
 #define NO_OF_PAGES 256
@@ -23,12 +23,12 @@
 struct logical_memory {
     int page_size; // 4 bytes
     int no_of_pages;
-    bool free_pages[NO_OF_PAGES];
+    int free_pages[NO_OF_PAGES];
     int free_page_stack[NO_OF_PAGES];
-    int stack_top;
-
-    // int allocated_pages[NO_OF_PAGES];
-    // int free_page_counter;
+    int free_stack_top;
+    int free_page_counter;
+    int allocated_page_stack[NO_OF_PAGES];
+    int allocated_stack_top;
 };
 
 /**
@@ -39,13 +39,15 @@ struct logical_memory {
 void initialize_logical_memory(struct logical_memory* mem) {
     mem->page_size = PAGE_SIZE;
     mem->no_of_pages = NO_OF_PAGES;
-    mem->stack_top = -1;
+    mem->free_stack_top = -1;
+    mem->allocated_stack_top = -1;
+    mem->free_page_counter = 0;
 
     // Initialize all pages as free and push them onto stack
-    for (int i = 0; i < mem->no_of_blocks; i++) {
+    for (int i = 0; i < mem->no_of_pages; i++) {
         mem->free_pages[i] = i;
-        mem->free_page_stack[++mem->stack_top] = i; // this is how we push onto the stack
-        // mem->free_page_counter++;
+        mem->free_page_stack[++mem->free_stack_top] = i; // this is how we push onto the stack
+        mem->free_page_counter++;
     }
 }
 
@@ -79,15 +81,21 @@ void calloc(struct logical_memory* mem, struct processes *process){
 
     // check if available resources are greater than need
     if(mem->free_page_counter < frames_needed){
-        printf('Not enough resources')
+        printf('Not enough resources');
         return;
     }
 
-    // A for loop that attempts to assign address spaces contiguously
+    // pop pages from the free stack and allocate them to the process
     int allocated_pages[frames_needed];
     for(int i = 0; i < frames_needed; i++ ){
-        allocated_pages[i] = mem->free_page_stack[mem->stack_top--]; 
-        mem->free_pages[allocated_pages[i]] = false;
+        allocated_pages[i] = mem->free_page_stack[mem->free_stack_top--]; 
+        mem->free_pages[allocated_pages[i]] = 0;
+    }
+
+    // push allocated pages onto the allocated stack
+    for(int i = frames_needed - 1; i >= 0; i--){
+        mem->allocated_stack_top++;
+        mem->allocated_page_stack[mem->allocated_stack_top] = allocated_pages[i];
     }
 
     // Update the page table for the process
