@@ -3,7 +3,11 @@
 //
 #include<stdio.h>
 #include<stdlib.h>
-#include "processes.h"
+#include "processes.c"
+
+// Import Dependencies
+#include<stdio.h>
+#include<stdlib.h>
 
 #define NUM_PAGES 5
 
@@ -69,7 +73,4 @@ void print_page_table() {
         printf("Page %d: Frame %d\n", i, page_table[i].frame_number);
     }
 }
-
-
-//TODO implement page_table with the idea that every process has its own page table
 
