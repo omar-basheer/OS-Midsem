@@ -39,7 +39,7 @@ void initialize_logical_memory(struct logical_memory* mem) {
 
 
 /** A function that calculates the number of frames needed by a process **/
-int calculate_frames(struct processes* process) {
+int calculate_frames(struct rocesses* process) {
     int page_size = 4;
     int process_size = process->process_size;
 
