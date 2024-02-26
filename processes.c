@@ -57,6 +57,7 @@ Process* create_processes(int num_processes, int max_memory_size) {
  */
 void process_request_memory(Process* process, int requested_memory_size) {
     if (process->process_request_limit > 0 && requested_memory_size <= process->process_size) {
+        
         printf("Process %d: Requested memory successfully allocated (%d MB)\n", process->process_id, requested_memory_size);
         process->process_request_limit--;
         process->requested_memory_size = requested_memory_size; // Update requested memory size
