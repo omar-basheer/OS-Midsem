@@ -1,15 +1,9 @@
 //
 // Created by sblan on 20/02/2024.
 //
-
-// Import Dependencies
 #include<stdio.h>
 #include<stdlib.h>
-// #include "processes.c"
-
-// Import Dependencies
-#include<stdio.h>
-#include<stdlib.h>
+#include "processes.h"
 
 #define NUM_PAGES 5
 
@@ -39,7 +33,7 @@ PageTableEntry page_table[NUM_PAGES];
  *
  * @param process The process whose page table is being initialized.
  */
-void init_page_table(Process *process) {
+void init_page_table(struct Process* process) {
     for (int i = 0; i < NUM_PAGES; i++) {
         process->page_table[i].frame_number = -1;
         process->page_table[i].valid = 0;
@@ -52,7 +46,7 @@ void init_page_table(Process *process) {
  * @param process The process whose page table is to be accessed.
  * @return A pointer to the page table of the process.
  */
-PageTableEntry* access_process_page_table(Process *process) {
+PageTableEntry* access_process_page_table(struct Process* process) {
     return process->page_table;
 }
 

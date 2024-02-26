@@ -75,7 +75,7 @@ int calculate_frames(struct Process* process) {
  * @param mem The logical memory structure.
  * @param process The process structure.
  */
-void calloc(struct logical_memory* mem, struct processes *process){
+void calloc(struct logical_memory* mem, struct Process* process){
 
     int frames_needed = calculate_frames(process);
 
@@ -101,7 +101,7 @@ void calloc(struct logical_memory* mem, struct processes *process){
     // Update the page table for the process
     for(int i = 0; i < frames_needed; i++){
         process->page_table[i].frame_number = allocated_pages[i];
-        process->page_table[i].valid =  1;
+        process->page_table[i].valid = 1;
     }
 
 }
