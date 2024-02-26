@@ -23,10 +23,12 @@
 struct logical_memory {
     int page_size; // 4 bytes
     int no_of_pages;
-    // int logical_space[NO_OF_PAGES];
-    int free_pages[NO_OF_PAGES];
-    int allocated_pages[NO_OF_PAGES];
-    int free_page_counter;
+    bool free_pages[NO_OF_PAGES];
+    int free_page_stack[NO_OF_PAGES];
+    int stack_top;
+
+    // int allocated_pages[NO_OF_PAGES];
+    // int free_page_counter;
 };
 
 /**
@@ -37,12 +39,13 @@ struct logical_memory {
 void initialize_logical_memory(struct logical_memory* mem) {
     mem->page_size = PAGE_SIZE;
     mem->no_of_pages = NO_OF_PAGES;
-    mem->free_page_counter = 0;
+    mem->stack_top = -1;
 
-    // Populate the free address array
+    // Initialize all pages as free and push them onto stack
     for (int i = 0; i < mem->no_of_blocks; i++) {
         mem->free_pages[i] = i;
-        mem->free_page_counter++;
+        mem->free_page_stack[++mem->stack_top] = i; // this is how we push onto the stack
+        // mem->free_page_counter++;
     }
 }
 
@@ -81,8 +84,16 @@ void calloc(struct logical_memory* mem, struct processes *process){
     }
 
     // A for loop that attempts to assign address spaces contiguously
+    int allocated_pages[frames_needed];
     for(int i = 0; i < frames_needed; i++ ){
+        allocated_pages[i] = mem->free_page_stack[mem->stack_top--]; 
+        mem->free_pages[allocated_pages[i]] = false;
+    }
 
+    // Update the page table for the process
+    for(int i = 0; i < frames_needed; i++){
+        process->page_table[i].frame_number = allocated_pages[i];
+        process->page_table[i].valid =  1;
     }
 
 }

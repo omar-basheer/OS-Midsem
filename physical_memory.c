@@ -11,17 +11,30 @@
 #define NUM_PAGES 5
 #define MEMORY_SIZE (PAGE_SIZE * NUM_PAGES)
 
-// Physical Memory
+/**
+ * @brief Declaration of the physical memory array.
+ * 
+ * This array represents the physical memory used by the program.
+ * It has a size of MEMORY_SIZE.
+ */
 char physical_memory[MEMORY_SIZE];
 
 
+/**
+ * Initializes the physical memory by filling it with characters from 'a' to 'z'.
+ * The memory size is defined by the constant MEMORY_SIZE.
+ */
 void init_physical_memory(){
     for (int i = 0; i < MEMORY_SIZE; i++) {
         physical_memory[i] = 'a' + (i % 26);
     }
 }
 
-// Function to print the contents of physical memory
+/**
+ * Prints the contents of the physical memory.
+ * This function iterates over each frame in the physical memory
+ * and prints the characters stored in each frame.
+ */
 void print_physical_memory() {
     printf("Physical memory contents:\n");
     for (int frame_number = 0; frame_number < NUM_PAGES; frame_number++) {
