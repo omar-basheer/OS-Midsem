@@ -6,24 +6,33 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<math.h>
+#include "processes.c"
 
 #define PAGE_SIZE 4
 #define NO_OF_PAGES 256
 
-/** A struct that models the physical memory/ram of a computer
- *  In this isntance, the memory size is 1024 bytes **/
+/**
+ * @struct logical_memory
+ * @brief Represents the logical memory structure.
+ * 
+ * This structure contains information about the logical memory, including the page size,
+ * the number of pages, the array representing the total logical address space, the array
+ * of free pages, the array of allocated pages, and the free page counter, all for a particular process.
+ * In this isntance, the memory size is 1024 bytes (page size * number of pages).
+ */
 struct logical_memory {
     int page_size; // 4 bytes
     int no_of_pages;
-//    int logical_space[NO_OF_PAGES]; // Array that represents the total logical address space
+    // int logical_space[NO_OF_PAGES];
     int free_pages[NO_OF_PAGES];
     int allocated_pages[NO_OF_PAGES];
     int free_page_counter;
 };
 
-/** A function that initializes the variables for each
- * instanceof the stract
- * @param mem Pointer to an instance of the logical_memory struct
+/**
+ * Initializes the logical memory structure.
+ * 
+ * @param mem Pointer to the logical memory structure to be initialized.
  */
 void initialize_logical_memory(struct logical_memory* mem) {
     mem->page_size = PAGE_SIZE;
@@ -37,9 +46,13 @@ void initialize_logical_memory(struct logical_memory* mem) {
     }
 }
 
-
-/** A function that calculates the number of frames needed by a process **/
-int calculate_frames(struct rocesses* process) {
+/**
+ * Calculates the number of frames required to allocate memory for a process.
+ * 
+ * @param process A pointer to the Process structure representing the process.
+ * @return The number of frames required for the process.
+ */
+int calculate_frames(struct Process* process) {
     int page_size = 4;
     int process_size = process->process_size;
 
@@ -49,14 +62,19 @@ int calculate_frames(struct rocesses* process) {
     return frame_allocation;
 }
 
-
-/** Calloc gets the number of pages needed and assigns contiguous addresses
- * to the process **/
+/**
+ * Allocates memory for a process in the logical memory using calloc.
+ * Calloc gets the number of pages needed and assigns contiguous addresses
+ * to the process
+ * 
+ * @param mem The logical memory structure.
+ * @param process The process structure.
+ */
 void calloc(struct logical_memory* mem, struct processes *process){
 
     int frames_needed = calculate_frames(process);
 
-    // check if avaialble resources are greater than need
+    // check if available resources are greater than need
     if(mem->free_page_counter < frames_needed){
         printf('Not enough resources')
         return;
@@ -67,24 +85,6 @@ void calloc(struct logical_memory* mem, struct processes *process){
 
     }
 
-}
-
-
-/** Converts a logical address to a page number **/
-int[] logical_address_to_page(struct logical_memory *obj){
-
-    // Get exponents of address space and page size
-    int m = obj->m;
-    int n = obj->n;
-
-   // Calculate page number
-   int page_number = m - n;
-   int page_offset = n;
-
-   // Store values in array
-   int[2] translated_address = {page_number, page_offset};
-
-   return translated_address;
 }
 
 

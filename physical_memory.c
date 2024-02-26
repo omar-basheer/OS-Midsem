@@ -11,25 +11,9 @@
 #define NUM_PAGES 5
 #define MEMORY_SIZE (PAGE_SIZE * NUM_PAGES)
 
-// Struct for a page table entry
-typedef struct {
-    int frame_number;
-    int valid;
-} PageTableEntry;
-
-// Page Table
-PageTableEntry page_table[NUM_PAGES];
-
 // Physical Memory
 char physical_memory[MEMORY_SIZE];
 
-// Function to initialize the page table
-void init_page_table() {
-    for (int i = 0; i < NUM_PAGES; i++) {
-        page_table[i].frame_number = -1;
-        page_table[i].valid = 0;
-    }
-}
 
 void init_physical_memory(){
     for (int i = 0; i < MEMORY_SIZE; i++) {
@@ -46,14 +30,6 @@ void print_physical_memory() {
             printf("%c ", physical_memory[frame_number * PAGE_SIZE + offset]);
         }
         printf("\n");
-    }
-}
-
-// Function to print the page table
-void print_page_table() {
-    printf("Page table:\n");
-    for (int i = 0; i < NUM_PAGES; i++) {
-        printf("Page %d: Frame %d\n", i, page_table[i].frame_number);
     }
 }
 
@@ -119,52 +95,3 @@ int main(){
     return 0;
 }
 
-/**
- *     if (page_table[page_number].valid == 0) {
-        printf("Page fault: Page %d is not in memory\n", page_number);
-        // find free frame
-        int free_frame = -1;
-        for(int j = 0; j < NUM_PAGES; j++) {
-            if (page_table[j].frame_number == -1) {
-                free_frame = j;
-                break;
-            }
-        }
-
-        if (free_frame != -1){
-            // allocate the free frame and mark it as valid
-            page_table[page_number].frame_number = free_frame;
-            page_table[page_number].valid = 1;
-        }
-        else {
-            printf("Error: No free frames available\n");
-            return;
-        }
-    }
-
-    // function to simulate page table population
-// void populate_page_table(int num_requested_pages) {
-//     for (int i = 0; i < num_requested_pages; i++) {
-
-//         // find free frame
-//         int free_frame = -1;
-//         for(int j = 0; j < NUM_PAGES; j++) {
-//             if (page_table[j].frame_number == -1) {
-//                 free_frame = j;
-//                 break;
-//             }
-//         }
-
-//         if (free_frame != -1){
-//             // allocate the free frame and mark it as valid
-//             page_table[free_frame].frame_number = free_frame;
-//             page_table[free_frame].valid = 1;
-//         }
-//         else {
-//             printf("Error: No free frames available\n");
-//             break;
-//         }
-//     }
-
-// }
-*/
