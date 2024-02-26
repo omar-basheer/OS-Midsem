@@ -1,7 +1,8 @@
 // Import Dependencies
 #include <stdio.h>
 #include <stdlib.h>
-#include "page_table.c"
+#include "page_table.h"
+// #include "processes.h"
 
 /**
  * @struct Process
@@ -35,7 +36,7 @@ int generate_random_size(int max_size) {
  * @param max_memory_size The maximum memory size for each process.
  * @return A pointer to the array of processes.
  */
-Process* create_processes(int num_processes, int max_memory_size) {
+struct Process* create_processes(int num_processes, int max_memory_size) {
     Process* processes = (Process*)defined_malloc(num_processes * sizeof(Process)); // our own malloc function
 
     for (int i = 0; i < num_processes; i++) {
@@ -67,7 +68,7 @@ void process_request_memory(Process* process, int requested_memory_size) {
 }
 
 // Function to free allocated memory for processes
-void free_processes(Process* processes) {
+void free_processes(struct Process* processes) {
     free(processes);
 }
 
