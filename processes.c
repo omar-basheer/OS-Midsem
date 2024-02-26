@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+/** A struct that models a process **/
 typedef struct{
     int process_id;
     int process_size;
@@ -27,3 +28,19 @@ Process* create_processes(int num_processes, int max_memory_size) {
     }
     return processes;
 }
+
+// Function for a process to request memory
+void process_request_memory(Process* process, int requested_memory_size) {
+    if (process->process_request_limit > 0 && requested_memory_size <= process->process_size) {
+        printf("Process %d: Requested memory successfully allocated (%d MB)\n", process->process_id, requested_memory_size);
+        process->process_request_limit--;
+    } else {
+        printf("Process %d: Memory request failed.\n", process->process_id);
+    }
+}
+
+// Function to free allocated memory for processes
+void free_processes(Process* processes) {
+    free(processes);
+}
+
