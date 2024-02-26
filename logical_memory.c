@@ -106,5 +106,7 @@ void calloc(struct logical_memory* mem, struct Process* process){
 
 }
 
-
 //TODO implement malloc with above doc string
+void malloc()
+
+
