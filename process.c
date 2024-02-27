@@ -22,7 +22,6 @@ int generate_random_size(int max_size) {
  * @return A pointer to the array of processes.
  */
 struct Process* create_processes(int num_processes, int max_memory_size) {
-    // struct Process* processes = (struct Process*)defined_malloc(num_processes * sizeof(struct Process)); // our own malloc function
     struct Process* processes = (struct Process*)malloc(num_processes * sizeof(struct Process));
 
     for (int i = 0; i < num_processes; i++) {

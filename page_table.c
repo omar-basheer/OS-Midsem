@@ -54,10 +54,10 @@ struct Page* access_process_page_table(struct Process* process) {
  * Page 2: Frame 1
  * ...
  */
-void print_page_table() {
+void print_page_table(struct Process* process) {
     printf("Page table:\n");
     for (int i = 0; i < NUM_PAGES; i++) {
-        printf("Page %d: Frame %d\n", i, page_table[i].frame_number);
+        printf("Page %d: Frame %d\n", i, process->page_table[i].frame_number);
     }
 }
 
