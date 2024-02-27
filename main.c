@@ -14,5 +14,6 @@ int main(){
 
   for (int i = 0; i < num_processes; i++) {
       printf("Process %d: Size %d, Request Limit %d\n", processes[i].process_id, processes[i].process_size, processes[i].process_request_limit);
+      print_page_table(&processes[i]);
   } 
 }

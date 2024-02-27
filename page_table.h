@@ -18,6 +18,6 @@ struct Page{
 extern struct Page page_table[NUM_PAGES];
 void init_page_table(struct Process *process);
 struct Page* access_process_page_table(struct Process *process);
-void print_page_table();
+void print_page_table(struct Process* process);
 
 #endif /* PAGE_TABLE_H */
