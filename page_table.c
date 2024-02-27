@@ -61,6 +61,3 @@ void print_page_table() {
     }
 }
 
-
-//TODO implement page_table with the idea that every process has its own page table
-
