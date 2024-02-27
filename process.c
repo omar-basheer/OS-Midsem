@@ -27,7 +27,7 @@ struct Process* create_processes(int num_processes, int max_memory_size) {
     for (int i = 0; i < num_processes; i++) {
         processes[i].process_id = i;
         processes[i].process_size = generate_random_size(max_memory_size);
-        processes[i].process_request_limit = processes[i].process_size / 100;
+        processes[i].process_request_limit = rand() % 5 + 1;
         processes[i].requested_memory_size = 0;
         init_page_table(&processes[i]);
     }
