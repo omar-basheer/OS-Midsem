@@ -7,9 +7,6 @@
 #include<stdlib.h>
 #include "physical_memory.h"
 
-struct Frame{
-    char data;
-};
 
 struct Frame physical_memory[NUM_FRAMES];
 
@@ -25,27 +22,34 @@ void init_physical_memory(){
 }
 
 /**
- * Prints the contents of the physical memory.
- * This function iterates over each frame in the physical memory
- * and prints the characters stored in each frame.
+ * Visualizes the physical memory by printing the contents of each frame.
+ *
+ * @param memory The array of frames representing the physical memory.
+ * @param num_frames The number of frames in the physical memory.
+ * @param frame_size The size of each frame in bytes.
  */
-void print_physical_memory(){
-    printf("Physical Memory:\n");
-    for (int i = 0; i < NUM_FRAMES; i++) {
-        printf("Frame %d: %d\n", i, physical_memory[i].data);
-    }
-}
+void visualize_physical_memory(const struct Frame* memory, int num_frames, int frame_size) {
+    printf("Physical Memory (%d bytes per frame):\n", frame_size);
 
-void print_physical_memory() {
-    printf("Physical memory contents:\n");
-    for (int frame_number = 0; frame_number < NUM_PAGES; frame_number++) {
-        printf("Frame %d: ", frame_number);
-        for (int offset = 0; offset < PAGE_SIZE; offset++) {
-            printf("%c ", physical_memory[frame_number * PAGE_SIZE + offset]);
+    // Header row
+    printf("  | ");
+    for (int i = 0; i < num_frames; i++) {
+        printf("Frame %d | ", i);
+    }
+    printf("\n");
+    printf("--+---------+---------+---------+---------+---------+--\n");
+
+    // Content rows
+    for (int i = 0; i < frame_size; i++) {
+        printf("  |   ");
+        for (int j = 0; j < num_frames; j++) {
+            printf("%02X    |   ", memory[j].data); // Print data in hexadecimal format
         }
         printf("\n");
     }
 }
+
+
 
 // void memory_access(int address) {
 //     int page_number = address / PAGE_SIZE;

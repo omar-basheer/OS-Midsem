@@ -7,19 +7,20 @@
 #include "process.h"
 
 #define NUM_PAGES 5
-
+#define LEVELS 2
 
 /**
- * @brief Definition of the page table array.
+ * @brief Definition of the page table array for a single level page table.
  * 
  * This array represents the page table used in the operating system.
  * It contains PageTableEntry structures, which store information about each page.
  * The size of the array is defined by the constant NUM_PAGES.
  */
-struct Page page_table[NUM_PAGES];
+struct PageTableEntry page_table[NUM_PAGES];
+
 
 /**
- * Initializes the page table of a process.
+ * Initializes the single page table of a process.
  * Sets the frame number and validity flag of each page entry to default values.
  *
  * @param process The process whose page table is being initialized.
@@ -37,7 +38,7 @@ void init_page_table(struct Process* process) {
  * @param process The process whose page table is to be accessed.
  * @return A pointer to the page table of the process.
  */
-struct Page* access_process_page_table(struct Process* process) {
+struct PageTableEntry* access_process_page_table(struct Process* process) {
     return process->page_table;
 }
 

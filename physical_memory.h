@@ -9,10 +9,15 @@
 
 #define NUM_FRAMES 5
 #define FRAME_SIZE 4
-#define NUM_PAGES 128
+#define NUM_PAGES 5
 #define PAGE_SIZE 4
 #define MEMORY_SIZE (FRAME_SIZE * NUM_PAGES)
 
+/**
+ * @struct Frame
+ * Represents a frame in physical memory.
+ * Each frame contains an integer data.
+ */
 struct Frame{
     int data;
 };
@@ -20,9 +25,10 @@ struct Frame{
 extern struct Frame physical_memory[NUM_FRAMES];
 
 void init_physical_memory();
+void visualize_physical_memory(const struct Frame* memory, int num_frames, int frame_size);
 
 void print_physical_memory();
 
-#endif PHYSICAL_MEMORY_H
+#endif // PHYSICAL_MEMORY_H
 
 
