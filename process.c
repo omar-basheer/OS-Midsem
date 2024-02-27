@@ -1,23 +1,8 @@
 // Import Dependencies
 #include <stdio.h>
 #include <stdlib.h>
+#include "process.h"
 #include "page_table.h"
-// #include "processes.h"
-
-/**
- * @struct Process
- * @brief Represents a process in the operating system.
- * 
- * The Process struct contains information about a process, including its ID, size, request limit,
- * requested memory size, and page table entries.
- */
-typedef struct{
-    int process_id;                     /**< The ID of the process. */
-    int process_size;                   /**< The size of the process. */
-    int process_request_limit;          /**< The request limit of the process. */
-    int requested_memory_size;          /**< The size of memory requested by the process. */
-    PageTableEntry page_table[NUM_PAGES]; /**< The page table entries for the process. */
-} Process;
 
 /**
  * Generates a random size within the specified maximum size.
@@ -37,7 +22,8 @@ int generate_random_size(int max_size) {
  * @return A pointer to the array of processes.
  */
 struct Process* create_processes(int num_processes, int max_memory_size) {
-    Process* processes = (Process*)defined_malloc(num_processes * sizeof(Process)); // our own malloc function
+    // struct Process* processes = (struct Process*)defined_malloc(num_processes * sizeof(struct Process)); // our own malloc function
+    struct Process* processes = (struct Process*)malloc(num_processes * sizeof(struct Process));
 
     for (int i = 0; i < num_processes; i++) {
         processes[i].process_id = i;
@@ -56,7 +42,7 @@ struct Process* create_processes(int num_processes, int max_memory_size) {
  * @param process The process for which memory is being allocated.
  * @param requested_memory_size The size of memory requested by the process.
  */
-void process_request_memory(Process* process, int requested_memory_size) {
+void process_request_memory(struct Process* process, int requested_memory_size) {
     if (process->process_request_limit > 0 && requested_memory_size <= process->process_size) {
         
         printf("Process %d: Requested memory successfully allocated (%d MB)\n", process->process_id, requested_memory_size);
@@ -71,4 +57,7 @@ void process_request_memory(Process* process, int requested_memory_size) {
 void free_processes(struct Process* processes) {
     free(processes);
 }
+
+
+
 

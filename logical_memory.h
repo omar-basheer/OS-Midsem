@@ -3,7 +3,7 @@
 #ifndef LOGICAL_MEMORY_H
 #define LOGICAL_MEMORY_H
 
-#include "processes.h"
+#include "process.h"
 
 #define PAGE_SIZE 4
 #define NO_OF_PAGES 256
@@ -21,6 +21,6 @@ struct logical_memory {
 
 void initialize_logical_memory(struct logical_memory* mem);
 int calculate_frames(struct Process* process);
-void allocate_memory(struct logical_memory* mem, struct Process* process);
+// void allocate_memory(struct logical_memory* mem, struct Process* process);
 
 #endif // LOGICAL_MEMORY_H

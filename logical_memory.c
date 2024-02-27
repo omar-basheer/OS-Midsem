@@ -6,7 +6,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<math.h>
-#include "processes.h"
+#include "process.h"
 
 #define PAGE_SIZE 4
 #define NO_OF_PAGES 256

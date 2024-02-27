@@ -3,19 +3,10 @@
 //
 #include<stdio.h>
 #include<stdlib.h>
-#include "processes.h"
+#include "page_table.h"
+#include "process.h"
 
 #define NUM_PAGES 5
-
-/**
- * @struct PageTableEntry
- * Represents an entry in a page table.
- * Contains the frame number and a flag indicating whether the entry is valid.
- */
-typedef struct {
-    int frame_number;   // The frame number associated with the page
-    int valid;          // Flag indicating whether the entry is valid
-} PageTableEntry;
 
 
 /**
@@ -25,7 +16,7 @@ typedef struct {
  * It contains PageTableEntry structures, which store information about each page.
  * The size of the array is defined by the constant NUM_PAGES.
  */
-PageTableEntry page_table[NUM_PAGES];
+struct Page page_table[NUM_PAGES];
 
 /**
  * Initializes the page table of a process.
@@ -46,7 +37,7 @@ void init_page_table(struct Process* process) {
  * @param process The process whose page table is to be accessed.
  * @return A pointer to the page table of the process.
  */
-PageTableEntry* access_process_page_table(struct Process* process) {
+struct Page* access_process_page_table(struct Process* process) {
     return process->page_table;
 }
 
