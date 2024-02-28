@@ -7,29 +7,11 @@
 #include<stdlib.h>
 #include<math.h>
 #include "process.h"
+#include "logical_memory.h"
 
 #define PAGE_SIZE 4
-#define NO_OF_PAGES 256
+#define NUM_PAGES 5
 
-/**
- * @struct logical_memory
- * @brief Represents the logical memory structure.
- * 
- * This structure contains information about the logical memory, including the page size,
- * the number of pages, the array representing the total logical address space, the array
- * of free pages, the array of allocated pages, and the free page counter, all for a particular process.
- * In this isntance, the memory size is 1024 bytes (page size * number of pages).
- */
-struct logical_memory {
-    int page_size; // 4 bytes
-    int no_of_pages;
-    int free_pages[NO_OF_PAGES];
-    int free_page_stack[NO_OF_PAGES];
-    int free_stack_top;
-    int free_page_counter;
-    int allocated_page_stack[NO_OF_PAGES];
-    int allocated_stack_top;
-};
 
 /**
  * Initializes the logical memory structure.
@@ -38,7 +20,7 @@ struct logical_memory {
  */
 void initialize_logical_memory(struct logical_memory* mem) {
     mem->page_size = PAGE_SIZE;
-    mem->no_of_pages = NO_OF_PAGES;
+    mem->no_of_pages = NUM_PAGES;
     mem->free_stack_top = -1;
     mem->allocated_stack_top = -1;
     mem->free_page_counter = 0;
@@ -49,6 +31,44 @@ void initialize_logical_memory(struct logical_memory* mem) {
         mem->free_page_stack[++mem->free_stack_top] = i; // this is how we push onto the stack
         mem->free_page_counter++;
     }
+}
+
+void visualize_logical_memory(struct logical_memory* mem) {
+    printf("Logical Memory :\n");
+
+    // Header row
+    printf("     | Page Size |  Num Pages |    Free Pages   | Allocated Pages\n");
+    printf("-----+-----------+------------+-----------------+-----------------\n");
+
+    // Content rows
+    printf("     |    %d      |      %d     |", mem->page_size, mem->free_page_counter);
+
+    // Display free pages
+    if (mem->free_stack_top == -1) {
+        printf("None");
+    } else {
+        printf(" [");
+        for (int i = 0; i <= mem->free_stack_top; i++) {
+            printf("%d%s", mem->free_pages[i], (i < mem->free_stack_top) ? ", " : "");
+        }
+        printf("]");
+    }
+
+    printf(" | ");
+
+    // Display allocated pages
+    if (mem->allocated_stack_top == -1) {
+        printf("None");
+    } else {
+        printf(" [");
+        for (int i = 0; i <= mem->allocated_stack_top; i++) {
+            printf("%d%s", mem->allocated_page_stack[i], (i < mem->allocated_stack_top) ? ", " : "");
+        }
+        printf("]");
+    }
+
+    printf("\n");
+    printf("\n");
 }
 
 /**
@@ -75,13 +95,13 @@ int calculate_frames(struct Process* process) {
  * @param mem The logical memory structure.
  * @param process The process structure.
  */
-void calloc(struct logical_memory* mem, struct Process* process){
+void _calloc(struct logical_memory* mem, struct Process* process){
 
     int frames_needed = calculate_frames(process);
 
     // check if available resources are greater than need
     if(mem->free_page_counter < frames_needed){
-        printf('Not enough resources');
+        printf("Not enough resources");
         return;
     }
 
@@ -100,13 +120,13 @@ void calloc(struct logical_memory* mem, struct Process* process){
 
     // Update the page table for the process
     for(int i = 0; i < frames_needed; i++){
-        process->page_table[i].frame_number = allocated_pages[i];
-        process->page_table[i].valid = 1;
+        process->page_table[i].page_table->frame_number = allocated_pages[i];
+        process->page_table[i].page_table->valid = 1;
     }
 
 }
 
 //TODO implement malloc with above doc string
-void malloc()
+// void malloc()
 
 

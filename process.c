@@ -31,7 +31,6 @@ struct Process* create_processes(int num_processes, int max_memory_size) {
         processes[i].requested_memory_size = 0;
         init_page_table(&processes[i]);
     }
-
     return processes;
 }
 
@@ -47,6 +46,7 @@ void process_request_memory(struct Process* process, int requested_memory_size) 
         printf("Process %d: Requested memory successfully allocated (%d MB)\n", process->process_id, requested_memory_size);
         process->process_request_limit--;
         process->requested_memory_size = requested_memory_size; // Update requested memory size
+        
     } else {
         printf("Process %d: Memory request failed.\n", process->process_id);
     }
