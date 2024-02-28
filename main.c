@@ -2,10 +2,10 @@
 #include <stdlib.h>
 #include <time.h>
 #include "process.h"
-#include "physical_memory.h"
 #include "logical_memory.h"
 
-
+#include "physical_memory.h"
+#include <unistd.h>
 
 int main(){
   srand((unsigned int)time(NULL));
@@ -29,7 +29,20 @@ int main(){
       hierarchical_page_table[i] = NULL;
   }
 
+  // Create processes
   struct Process* processes = create_processes(num_processes, max_memory_size);
   visualize_hierarchical_page_table();  
+
+  for (int i = 0; i < num_processes; i++) {
+      printf("\nProcess %d: Size %d, Request Limit %d\n", processes[i].process_id, processes[i].process_size, processes[i].process_request_limit);
+      print_page_table(&processes[i]);
+
+      // Allocate memory to each process
+      printf("Requesting memory");
+//      sleep(2);
+      process_request_memory(&processes[i], (int) processes[i].process_size ,&mem);
+
+
+  }
 
 }
