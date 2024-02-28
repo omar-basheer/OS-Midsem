@@ -7,20 +7,57 @@
 #include<stdlib.h>
 #include "physical_memory.h"
 
-
 struct Frame physical_memory[NUM_FRAMES];
 
 /**
  * Initializes the physical memory by filling it with 0.
  * The memory size is defined by the constant MEMORY_SIZE.
  */
-void init_physical_memory(){
-    for (int i = 0; i < NUM_FRAMES; i++) {
-        // Set initial data in each frame to a default value, 0
-        physical_memory[i].data = 0;
+void initialize_physical_memory(struct physical_memory *mem){
+    mem->frame_size = FRAME_SIZE;
+    mem->no_of_frames = NUM_FRAMES;
+    mem->free_stack_top = -1;
+    mem->allocated_stack_top = -1;
+    mem->free_frame_counter = NUM_FRAMES;
+
+    // Initialize all frames as free and push them onto stack
+    for (int i = 0; i < mem->no_of_frames; i++) {
+        mem->free_frames[i] = i;
+        mem->free_frame_stack[++mem->free_stack_top] = i; // this is how we push onto the stack
     }
 }
 
+int calculate_process_frames(struct Process *process){
+    int process_size = process->process_size;
+
+    // Use ceil() to round up the result
+    int frame_allocation = (int)ceil((double)process_size + FRAME_SIZE - 1/ FRAME_SIZE);
+
+    return frame_allocation;
+}
+
+/**
+ * Allocates a frame in physical memory and updates the page table.
+ *
+ */
+void allocate_process_frame(struct physical_memory *mem, struct Process *process){
+    if(mem->free_stack_top >= 0){
+        int frame_number = mem->free_frame_stack[mem->free_stack_top--];
+        mem->allocated_frame_stack[++mem->allocated_stack_top] = frame_number;
+
+        mem->current_process = process;
+
+        // Update the page table with the allocated frame number
+        struct Page *page_table_entry = access_process_page_table(mem->current_process);
+        page_table_entry->frame_number = frame_number;
+        page_table_entry->valid = true;
+
+        mem->free_frame_counter--;
+        printf("Allocated Frame %d for Page\n", frame_number);
+    } else{
+        printf("No available frames for Page\n");
+        }
+    }
 /**
  * Visualizes the physical memory by printing the contents of each frame.
  *
@@ -46,8 +83,37 @@ void visualize_physical_memory(const struct Frame* memory, int num_frames, int f
             printf("%02X    |   ", memory[j].data); // Print data in hexadecimal format
         }
         printf("\n");
+}}
+
+/**
+ * Deallocates a frame in physical memory and updates the page table.
+ *
+ */
+void deallocate_frame(struct physical_memory *mem, struct Process *process) {
+    if (mem->allocated_stack_top >= 0) {
+        // Deallocate a frame
+        int frame_number = mem->allocated_frame_stack[mem->allocated_stack_top--];
+        mem->free_frame_stack[++mem->free_stack_top] = frame_number;
+
+        mem->current_process = NULL;
+
+        // Update the page table to indicate that the frame is now free
+        struct Page *page_table_entry = access_process_page_table(mem->current_process);
+        page_table_entry->valid = false;
+
+        // Update the counters
+        mem->free_frame_counter++;
+        printf("Deallocated Frame %d\n", frame_number);
+    } else {
+        printf("Error: No frames to allocate\n");
     }
 }
+
+
+
+
+
+
 
 
 
@@ -91,25 +157,5 @@ void visualize_physical_memory(const struct Frame* memory, int num_frames, int f
 //         }
 //     }
 
-// }
-
-
-
-// int main(){
-//     srand(time(NULL));
-//     init_page_table();
-//     init_physical_memory();
-
-//     print_page_table();
-//     print_physical_memory();
-
-//     //generate random memory access requests
-//     for (int i = 0; i < 10; i++) {
-//         int address = rand() % MEMORY_SIZE;
-//         memory_access(address);
-//     }
-    
-//     print_page_table();
-//     return 0;
 // }
 

@@ -6,6 +6,7 @@
 #include "logical_memory.h"
 
 
+
 int main(){
   srand((unsigned int)time(NULL));
 
