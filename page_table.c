@@ -17,7 +17,7 @@ struct PageTable* hierarchical_page_table[NUM_PAGES];
  *
  * @param process The process whose page table is being initialized.
  */
-void init_page_table(struct Process* process) {
+void initialize_page_table(struct Process* process) {
     int index = -1;
     for (int i = 0; i < NUM_PAGES; i++) {
         if (hierarchical_page_table[i] == NULL) {
@@ -32,10 +32,14 @@ void init_page_table(struct Process* process) {
     }
 
     hierarchical_page_table[index] = (struct PageTable*)malloc(sizeof(struct PageTable));
+    if (hierarchical_page_table[index] == NULL) {
+        printf("Error: Memory allocation failed\n");
+        return;
+    }
 
     for (int i = 0; i < NUM_PAGES; i++) {
-        hierarchical_page_table[index]->page_table[i].frame_number = -1;
-        hierarchical_page_table[index]->page_table[i].valid = 0;
+        hierarchical_page_table[index]->page_table_entry[i].frame_number = -1;
+        hierarchical_page_table[index]->page_table_entry[i].valid = 0;
     }
 
     process->page_table = hierarchical_page_table[index];
@@ -58,19 +62,37 @@ void init_page_table(struct Process* process) {
  * ...
  */
 void print_page_table(struct Process* process) {
+    printf("Process %d: Size %d, Request Limit %d\n", process->process_id, process->process_size, process->process_request_limit);
     printf("Page table:\n");
     for (int i = 0; i < NUM_PAGES; i++) {
-        printf("Page %d: Frame %d\n", i, process->page_table[i].page_table->frame_number);
+        printf("Page %d: Frame %d\n", i, process->page_table[i].page_table_entry->frame_number);
     }
 }
 
+void visualize_hierarchical_page_table() {
+    printf("Hierarchical Page Table:\n");
+
+    // Iterate over each level of the hierarchical page table
+    for (int i = 0; i < NUM_PAGES; i++) {
+        if (hierarchical_page_table[i] != NULL) {
+            printf("Level %d:\n", i);
+
+            // Iterate over each page table entry in this level
+            for (int j = 0; j < NUM_PAGES; j++) {
+                printf("Page %d: Frame %d\n", j, hierarchical_page_table[i]->page_table_entry[j].frame_number);
+            }
+        } else {
+            printf("Level %d: Not initialized\n", i);
+        }
+    }
+}
 /**
  * Accesses the page table of a given process.
  *
  * @param process The process whose page table is to be accessed.
  * @return A pointer to the page table of the process.
  */
-// struct PageTableEntry* access_process_page_table(struct Process* process) {
-//     return process->page_table;
-// }
+struct PageTable* access_process_page_table(struct Process* process) {
+    return process->page_table;
+}
 
