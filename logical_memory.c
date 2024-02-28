@@ -120,8 +120,8 @@ void _calloc(struct logical_memory* mem, struct Process* process){
 
     // Update the page table for the process
     for(int i = 0; i < frames_needed; i++){
-        process->page_table[i].frame_number = allocated_pages[i];
-        process->page_table[i].valid = 1;
+        process->page_table[i].page_table->frame_number = allocated_pages[i];
+        process->page_table[i].page_table->valid = 1;
     }
 
 }

@@ -16,7 +16,13 @@ struct PageTableEntry{
     int valid;          // Flag indicating whether the entry is valid
 };
 
-extern struct PageTableEntry page_table[NUM_PAGES];
+struct PageTable{
+    struct PageTableEntry page_table[NUM_PAGES]; // single entry in the hierarchical page table, which is a pointer to the next level of the page table
+};
+
+extern struct PageTable* hierarchical_page_table[NUM_PAGES];
+
+// extern struct PageTableEntry page_table[NUM_PAGES];
 void init_page_table(struct Process *process);
 struct PageTableEntry* access_process_page_table(struct Process *process);
 void print_page_table(struct Process* process);

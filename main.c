@@ -21,6 +21,10 @@ int main(){
   initialize_logical_memory(logical_memory);
   visualize_logical_memory(logical_memory);
 
+  for (int i = 0; i < NUM_PAGES; i++) {
+      hierarchical_page_table[i] = NULL;
+  }
+
   struct Process* processes = create_processes(num_processes, max_memory_size);
 
   for (int i = 0; i < num_processes; i++) {

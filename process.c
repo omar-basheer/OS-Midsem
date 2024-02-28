@@ -31,9 +31,6 @@ struct Process* create_processes(int num_processes, int max_memory_size) {
         processes[i].requested_memory_size = 0;
         init_page_table(&processes[i]);
     }
-
-
-
     return processes;
 }
 

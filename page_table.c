@@ -9,15 +9,7 @@
 #define NUM_PAGES 5
 #define LEVELS 2
 
-/**
- * @brief Definition of the page table array for a single level page table.
- * 
- * This array represents the page table used in the operating system.
- * It contains PageTableEntry structures, which store information about each page.
- * The size of the array is defined by the constant NUM_PAGES.
- */
-struct PageTableEntry page_table[NUM_PAGES];
-
+struct PageTable* hierarchical_page_table[NUM_PAGES];
 
 /**
  * Initializes the single page table of a process.
@@ -26,21 +18,31 @@ struct PageTableEntry page_table[NUM_PAGES];
  * @param process The process whose page table is being initialized.
  */
 void init_page_table(struct Process* process) {
+    int index = -1;
     for (int i = 0; i < NUM_PAGES; i++) {
-        process->page_table[i].frame_number = -1;
-        process->page_table[i].valid = 0;
+        if (hierarchical_page_table[i] == NULL) {
+            index = i;
+            break;
+        }
     }
+
+    if (index == -1) {
+        printf("Page Fault: No free space in the hierarchical page table\n");
+        return;
+    }
+
+    hierarchical_page_table[index] = (struct PageTable*)malloc(sizeof(struct PageTable));
+
+    for (int i = 0; i < NUM_PAGES; i++) {
+        hierarchical_page_table[index]->page_table[i].frame_number = -1;
+        hierarchical_page_table[index]->page_table[i].valid = 0;
+    }
+
+    process->page_table = hierarchical_page_table[index];
 }
 
-/**
- * Accesses the page table of a given process.
- *
- * @param process The process whose page table is to be accessed.
- * @return A pointer to the page table of the process.
- */
-struct PageTableEntry* access_process_page_table(struct Process* process) {
-    return process->page_table;
-}
+
+
 
 /**
  * Prints the page table, displaying the mapping between page numbers and frame numbers.
@@ -58,7 +60,17 @@ struct PageTableEntry* access_process_page_table(struct Process* process) {
 void print_page_table(struct Process* process) {
     printf("Page table:\n");
     for (int i = 0; i < NUM_PAGES; i++) {
-        printf("Page %d: Frame %d\n", i, process->page_table[i].frame_number);
+        printf("Page %d: Frame %d\n", i, process->page_table[i].page_table->frame_number);
     }
 }
+
+/**
+ * Accesses the page table of a given process.
+ *
+ * @param process The process whose page table is to be accessed.
+ * @return A pointer to the page table of the process.
+ */
+// struct PageTableEntry* access_process_page_table(struct Process* process) {
+//     return process->page_table;
+// }
 
