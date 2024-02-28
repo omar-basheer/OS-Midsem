@@ -78,11 +78,10 @@ void visualize_logical_memory(struct logical_memory* mem) {
  * @return The number of frames required for the process.
  */
 int calculate_frames(struct Process* process) {
-    int page_size = 4;
     int process_size = process->process_size;
 
     // Use ceil() to round up the result
-    int frame_allocation = (int)ceil((double)process_size / page_size);
+    int frame_allocation = (int)ceil((double)process_size / PAGE_SIZE);
 
     return frame_allocation;
 }
@@ -120,8 +119,8 @@ void _calloc(struct logical_memory* mem, struct Process* process){
 
     // Update the page table for the process
     for(int i = 0; i < frames_needed; i++){
-        process->page_table[i].page_table->frame_number = allocated_pages[i];
-        process->page_table[i].page_table->valid = 1;
+        process->page_table[i].page_table_entry->frame_number = allocated_pages[i];
+        process->page_table[i].page_table_entry->valid = 1;
     }
 
 }

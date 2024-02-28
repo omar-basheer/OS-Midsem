@@ -20,9 +20,9 @@ struct Process{
     int process_size;                   /**< The size of the process. */
     int process_request_limit;          /**< The request limit of the process. */
     int requested_memory_size;          /**< The size of memory requested by the process. */
-    // struct PageTableEntry page_table[NUM_PAGES]; /**< The page table entries for the process. */
     struct PageTable* page_table; 
 };
+    // struct PageTableEntry page_table[NUM_PAGES]; /**< The page table entries for the process. */
 
 // Function Prototypes
 int generate_random_size(int max_size);

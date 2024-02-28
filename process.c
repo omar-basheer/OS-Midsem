@@ -23,13 +23,17 @@ int generate_random_size(int max_size) {
  */
 struct Process* create_processes(int num_processes, int max_memory_size) {
     struct Process* processes = (struct Process*)malloc(num_processes * sizeof(struct Process));
-
+    if (processes == NULL) {
+        printf("Error: Memory allocation failed for processes\n");
+        return NULL;
+    }
+    
     for (int i = 0; i < num_processes; i++) {
         processes[i].process_id = i;
         processes[i].process_size = generate_random_size(max_memory_size);
         processes[i].process_request_limit = rand() % 5 + 1;
         processes[i].requested_memory_size = 0;
-        init_page_table(&processes[i]);
+        initialize_page_table(&processes[i]);
     }
     return processes;
 }
