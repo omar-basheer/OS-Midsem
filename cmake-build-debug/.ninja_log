@@ -1,0 +1,8 @@
+# ninja log v5
+7	258	7307701831329527	CMakeFiles/OS_Midsem.dir/frame_table.c.obj	9295c1bb4ac2cffd
+45	619	7307701834929890	CMakeFiles/OS_Midsem.dir/main.c.obj	84aa138e073dd477
+1	632	7307701835059544	CMakeFiles/OS_Midsem.dir/logical_memory.c.obj	e7d411fc59f97c5b
+4	213	7307762904960250	CMakeFiles/OS_Midsem.dir/logical_memory.c.obj	e7d411fc59f97c5b
+10	232	7307762905089908	CMakeFiles/OS_Midsem.dir/page_table.c.obj	4e6a42315590ee81
+15	237	7307762905179663	CMakeFiles/OS_Midsem.dir/main.c.obj	84aa138e073dd477
+232	376	7307762906635766	CMakeFiles/OS_Midsem.dir/process.c.obj	92a7eabdaabcf861

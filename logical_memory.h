@@ -11,7 +11,7 @@
 struct logical_memory {
     int page_size;
     int no_of_pages;
-    int free_pages[NO_OF_PAGES];
+//    int free_pages[NO_OF_PAGES];
     int free_page_stack[NO_OF_PAGES];
     int free_stack_top;
     int free_page_counter;
@@ -20,7 +20,8 @@ struct logical_memory {
 };
 
 void initialize_logical_memory(struct logical_memory* mem);
-int calculate_frames(struct Process* process);
+int calculate_pages(struct Process* process);
+int* _calloc(struct logical_memory* mem, struct Process* process);
 // void allocate_memory(struct logical_memory* mem, struct Process* process);
 
 #endif // LOGICAL_MEMORY_H

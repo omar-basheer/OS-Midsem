@@ -8,7 +8,7 @@
 #include "physical_memory.h"
 
 struct Frame{
-    char data;
+    int data;
 };
 
 struct Frame physical_memory[NUM_FRAMES];
@@ -20,7 +20,7 @@ struct Frame physical_memory[NUM_FRAMES];
 void init_physical_memory(){
     for (int i = 0; i < NUM_FRAMES; i++) {
         // Set initial data in each frame to a default value, 0
-        physical_memory[i].data = 0;
+        physical_memory[i].data = -1;
     }
 }
 

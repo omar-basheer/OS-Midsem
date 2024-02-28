@@ -7,6 +7,7 @@
 #include<stdlib.h>
 #include<math.h>
 #include "process.h"
+#include "logical_memory.h"
 
 #define PAGE_SIZE 4
 #define NO_OF_PAGES 256
@@ -20,16 +21,16 @@
  * of free pages, the array of allocated pages, and the free page counter, all for a particular process.
  * In this isntance, the memory size is 1024 bytes (page size * number of pages).
  */
-struct logical_memory {
-    int page_size; // 4 bytes
-    int no_of_pages;
-    int free_pages[NO_OF_PAGES];
-    int free_page_stack[NO_OF_PAGES];
-    int free_stack_top;
-    int free_page_counter;
-    int allocated_page_stack[NO_OF_PAGES];
-    int allocated_stack_top;
-};
+//struct logical_memory {
+//    int page_size; // 4 bytes
+//    int no_of_pages;
+//    int free_pages[NO_OF_PAGES];
+//    int free_page_stack[NO_OF_PAGES];
+//    int free_stack_top;
+//    int free_page_counter;
+//    int allocated_page_stack[NO_OF_PAGES];
+//    int allocated_stack_top;
+//};
 
 /**
  * Initializes the logical memory structure.
@@ -45,7 +46,7 @@ void initialize_logical_memory(struct logical_memory* mem) {
 
     // Initialize all pages as free and push them onto stack
     for (int i = 0; i < mem->no_of_pages; i++) {
-        mem->free_pages[i] = i;
+//        mem->free_pages[i] = i;
         mem->free_page_stack[++mem->free_stack_top] = i; // this is how we push onto the stack
         mem->free_page_counter++;
     }
@@ -57,14 +58,14 @@ void initialize_logical_memory(struct logical_memory* mem) {
  * @param process A pointer to the Process structure representing the process.
  * @return The number of frames required for the process.
  */
-int calculate_frames(struct Process* process) {
+int calculate_pages(struct Process* process) {
     int page_size = 4;
     int process_size = process->process_size;
 
     // Use ceil() to round up the result
-    int frame_allocation = (int)ceil((double)process_size / page_size);
+    int page_allocation = (int)ceil((double)process_size / page_size);
 
-    return frame_allocation;
+    return page_allocation;
 }
 
 /**
@@ -74,22 +75,29 @@ int calculate_frames(struct Process* process) {
  * 
  * @param mem The logical memory structure.
  * @param process The process structure.
+ * @returns returns a pointer to an integer array of size 3. The first index contains the status
+ * code indicating if memory was sucessfully allocated (1 for success, -1 for failure).
+ * The second index contains the number of pages/frames allocated. The third index contains
+ * the number of bytes allocated
  */
-void calloc(struct logical_memory* mem, struct Process* process){
+int* _calloc(struct logical_memory* mem, struct Process* process){
 
-    int frames_needed = calculate_frames(process);
+    // Initialize return values and frames needed
+    static int allocation[3] = {-1,0,0};
+    int frames_needed = calculate_pages(process);
 
-    // check if available resources are greater than need
-    if(mem->free_page_counter < frames_needed){
-        printf('Not enough resources');
-        return;
+    // check if available resources are greater than process need
+    if(frames_needed > mem->free_page_counter){
+        printf("Not enough resources");
+        return &allocation;
     }
 
     // pop pages from the free stack and allocate them to the process
     int allocated_pages[frames_needed];
     for(int i = 0; i < frames_needed; i++ ){
-        allocated_pages[i] = mem->free_page_stack[mem->free_stack_top--]; 
-        mem->free_pages[allocated_pages[i]] = 0;
+        allocated_pages[i] = mem->free_page_stack[mem->free_stack_top]; //pop
+        mem->free_stack_top--; //reduce top
+        mem->free_page_counter--;
     }
 
     // push allocated pages onto the allocated stack
@@ -104,9 +112,15 @@ void calloc(struct logical_memory* mem, struct Process* process){
         process->page_table[i].valid = 1;
     }
 
+    // Update return value
+    allocation[0] = 1;
+    allocation[1] = frames_needed;
+    allocation[2] = frames_needed * 4;
+
+    return &allocation;
+
 }
 
-//TODO implement malloc with above doc string
-void malloc()
+
 
 
