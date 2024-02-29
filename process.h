@@ -5,7 +5,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "page_table.h"
+#include "logical_memory.h"
+#include "physical_memory.h"
 
+struct physical_memory;
 struct PageTableEntry;
 
 /**
@@ -27,7 +30,7 @@ struct Process{
 // Function Prototypes
 int generate_random_size(int max_size);
 struct Process* create_processes(int num_processes, int max_memory_size);
-void process_request_memory(struct Process* process, int requested_memory_size);
+void process_request_memory(struct Process* process, int requested_memory_size, struct logical_memory* logical_mem, struct physical_memory* physical_mem);
 void free_processes(struct Process* processes);
 
 #endif /* PROCESS_H */

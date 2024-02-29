@@ -6,7 +6,7 @@
 #include "page_table.h"
 #include "process.h"
 
-#define NUM_PAGES 5
+#define NUM_PAGES 7
 #define LEVELS 2
 
 struct PageTable* hierarchical_page_table[NUM_PAGES];

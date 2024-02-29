@@ -1,7 +1,6 @@
 //
 // Created by sblan on 20/02/2024.
-//
-
+//physical_memory.c
 // Import Dependencies
 #include<stdio.h>
 #include<stdlib.h>
@@ -33,28 +32,6 @@ void initialize_physical_memory(struct physical_memory *mem){
 //     return frame_allocation;
 // }
 
-/**
- * Allocates a frame in physical memory and updates the page table.
- *
- */
-// void allocate_process_frame(struct physical_memory *mem, struct Process *process){
-//     if(mem->free_stack_top >= 0){
-//         int frame_number = mem->free_frame_stack[mem->free_stack_top--];
-//         mem->allocated_frame_stack[++mem->allocated_stack_top] = frame_number;
-
-//         mem->current_process = process;
-
-//         // Update the page table with the allocated frame number
-//         struct Page *page_table = access_process_page_table(mem->current_process);
-//         page_table = frame_number;
-//         page_table_entry->valid = true;
-
-//         mem->free_frame_counter--;
-//         printf("Allocated Frame %d for Page\n", frame_number);
-//     } else{
-//         printf("No available frames for Page\n");
-//         }
-//     }
 /**
  * Visualizes the physical memory by printing the contents of each frame.
  *

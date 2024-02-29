@@ -1,6 +1,6 @@
 //
 // Created by sblan on 20/02/2024.
-//
+// logical_memory.c
 
 // Import Dependencies
 #include<stdio.h>
@@ -8,9 +8,11 @@
 #include<math.h>
 #include "process.h"
 #include "logical_memory.h"
+// #include "physical_memory.h"
 
-#define PAGE_SIZE 4
-#define NUM_PAGES 5
+
+#define PAGE_SIZE 5
+#define NUM_PAGES 7
 
 
 /**
@@ -27,7 +29,7 @@ void initialize_logical_memory(struct logical_memory* mem) {
 
     // Initialize all pages as free and push them onto stack
     for (int i = 0; i < mem->no_of_pages; i++) {
-        mem->free_pages[i] = i;
+//        mem->free_pages[i] = i;
         mem->free_page_stack[++mem->free_stack_top] = i; // this is how we push onto the stack
         mem->free_page_counter++;
     }
@@ -79,11 +81,8 @@ void visualize_logical_memory(struct logical_memory* mem) {
  */
 int calculate_frames(struct Process* process) {
     int process_size = process->process_size;
-
-    // Use ceil() to round up the result
-    int frame_allocation = (int)ceil((double)process_size / PAGE_SIZE);
-
-    return frame_allocation;
+    int page_allocation = (int)ceil((double)process_size / PAGE_SIZE);
+    return page_allocation;
 }
 
 /**
@@ -93,28 +92,58 @@ int calculate_frames(struct Process* process) {
  * 
  * @param mem The logical memory structure.
  * @param process The process structure.
+ * @returns returns a pointer to an integer array of size 3. The first index contains the status
+ * code indicating if memory was sucessfully allocated (1 for success, -1 for failure).
+ * The second index contains the number of pages/frames allocated. The third index contains
+ * the number of bytes allocated
  */
-void _calloc(struct logical_memory* mem, struct Process* process){
+int* _calloc(struct logical_memory* logical_mem, struct physical_memory* physical_mem, struct Process* process){
+
+    // Initialize return values and frames needed
+    // static int allocation[3] = {-1,0,0};
+    int* allocation = (int*)malloc(3 * sizeof(int));
+    if (allocation == NULL) {
+        printf("Memory allocation failed\n");
+        return NULL;
+    }
+    allocation[0] = -1; // Default value indicating failure
+    allocation[1] = 0;
+    allocation[2] = 0;
 
     int frames_needed = calculate_frames(process);
 
-    // check if available resources are greater than need
-    if(mem->free_page_counter < frames_needed){
+    // check if available resources are greater than process need
+    if(frames_needed > logical_mem->free_page_counter || frames_needed > physical_mem->free_frame_counter){
         printf("Not enough resources");
-        return;
+        return allocation;
     }
 
     // pop pages from the free stack and allocate them to the process
     int allocated_pages[frames_needed];
     for(int i = 0; i < frames_needed; i++ ){
-        allocated_pages[i] = mem->free_page_stack[mem->free_stack_top--]; 
-        mem->free_pages[allocated_pages[i]] = 0;
+        allocated_pages[i] = logical_mem->free_page_stack[logical_mem->free_stack_top]; //pop
+        logical_mem->free_stack_top--; //reduce top
+        logical_mem->free_page_counter--;
+    }
+
+    // pop frames from the free frame stack and allocate them
+    int allocated_frames[frames_needed];
+    for(int i = 0; i < frames_needed; i++ ){
+        allocated_frames[i] = physical_mem->free_frame_stack[physical_mem->free_stack_top]; //pop
+        physical_mem->free_stack_top--; //reduce top
+        physical_mem->free_frame_counter--;
     }
 
     // push allocated pages onto the allocated stack
     for(int i = frames_needed - 1; i >= 0; i--){
-        mem->allocated_stack_top++;
-        mem->allocated_page_stack[mem->allocated_stack_top] = allocated_pages[i];
+        logical_mem->allocated_stack_top++;
+        logical_mem->allocated_page_stack[logical_mem->allocated_stack_top] = allocated_pages[i];
+    }
+
+    // push allocated frames onto the allocated stack
+    for(int i = frames_needed - 1; i >= 0; i--){
+        physical_mem->allocated_stack_top++;
+        physical_mem->allocated_frame_stack[physical_mem->allocated_stack_top] = allocated_frames[i];
     }
 
     // Update the page table for the process
@@ -123,9 +152,21 @@ void _calloc(struct logical_memory* mem, struct Process* process){
         process->page_table[i].page_table_entry->valid = 1;
     }
 
+    // Update the frames in physical memory
+    for(int i = 0; i < frames_needed; i++){
+        physical_mem->frames[allocated_frames[i]].allocated = 1;
+        
+    }
+
+    // Update return value
+    allocation[0] = 1;
+    allocation[1] = frames_needed;
+    allocation[2] = frames_needed * 4;
+
+    return allocation;
+
 }
 
-//TODO implement malloc with above doc string
-// void malloc()
+
 
 
