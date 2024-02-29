@@ -10,7 +10,7 @@ int main(){
   srand((unsigned int)time(NULL));
 
   int num_processes = 4;
-  int max_memory_size = 35;
+  int max_memory_size = 69;
 
   struct physical_memory physical_memory_instance;
   struct physical_memory* physical_memory = &physical_memory_instance;

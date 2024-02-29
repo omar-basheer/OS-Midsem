@@ -25,13 +25,12 @@ void initialize_logical_memory(struct logical_memory* mem) {
     mem->no_of_pages = NUM_PAGES;
     mem->free_stack_top = -1;
     mem->allocated_stack_top = -1;
-    mem->free_page_counter = 0;
+    mem->free_page_counter = NUM_PAGES;
 
     // Initialize all pages as free and push them onto stack
     for (int i = 0; i < mem->no_of_pages; i++) {
-//        mem->free_pages[i] = i;
+        mem->free_pages[i] = i;
         mem->free_page_stack[++mem->free_stack_top] = i; // this is how we push onto the stack
-        mem->free_page_counter++;
     }
 }
 
