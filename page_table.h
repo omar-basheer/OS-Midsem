@@ -1,6 +1,6 @@
 #ifndef PAGE_TABLE_H
 #define PAGE_TABLE_H
-#define NUM_PAGES 5
+#define NUM_PAGES 7
 #define LEVELS 2
 
 

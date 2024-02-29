@@ -7,10 +7,10 @@
 #include "page_table.h"
 #include "process.h"
 
-#define NUM_FRAMES 5
-#define FRAME_SIZE 4
-#define NUM_PAGES 5
-#define PAGE_SIZE 4
+#define NUM_FRAMES 7
+#define FRAME_SIZE 5
+#define NUM_PAGES 7
+#define PAGE_SIZE 5
 #define MEMORY_SIZE (FRAME_SIZE * NUM_PAGES)
 
 typedef int bool;
