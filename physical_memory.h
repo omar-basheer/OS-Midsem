@@ -36,8 +36,12 @@ struct physical_memory{
 
 void initialize_physical_memory(struct physical_memory *mem);
 void visualize_physical_memory(struct physical_memory *mem);
-void handle_page_fault(int page_number, struct Process* process);
-void deallocate_process_frame(struct physical_memory *mem, struct Process *process);
+// int calculate_process_frames(struct Process *process);
+// void visualize_physical_memory(const struct Frame* memory, int num_frames, int frame_size);
+// void allocate_process_frame(struct physical_memory *mem, struct Process *process);
+// void deallocate_process_frame(struct physical_memory *mem, struct Process *process);
+
+
 
 #endif // PHYSICAL_MEMORY_H
 

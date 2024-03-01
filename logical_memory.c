@@ -92,7 +92,8 @@ int calculate_frames(struct Process* process) {
  * @param mem The logical memory structure.
  * @param process The process structure.
  * @returns returns a pointer to an integer array of size 3. The first index contains the status
- * code indicating if memory was sucessfully allocated (1 for success, -1 for failure).
+ * code indicating if memory was sucessfully allocated (1 for success, -1 for failure, 0 if pages
+ * were assigned, but no frames assigned).
  * The second index contains the number of pages/frames allocated. The third index contains
  * the number of bytes allocated
  */
@@ -112,9 +113,9 @@ int* _calloc(struct logical_memory* logical_mem, struct physical_memory* physica
     int frames_needed = calculate_frames(process);
 
     // check if available resources are greater than process need
-    if(frames_needed > logical_mem->free_page_counter || frames_needed > physical_mem->free_frame_counter){
-        printf("Not enough resources\n");
-        return allocation;
+    if(frames_needed > logical_mem->free_page_counter){
+        printf("Not enough Virtual memory!\n");
+
     }
 
     // pop pages from the free stack and allocate them to the process
@@ -123,6 +124,14 @@ int* _calloc(struct logical_memory* logical_mem, struct physical_memory* physica
         allocated_pages[i] = logical_mem->free_page_stack[logical_mem->free_stack_top]; //pop
         logical_mem->free_stack_top--; //reduce top
         logical_mem->free_page_counter--;
+    }
+
+
+    // Checkk if enough pages are available
+    if(frames_needed > physical_mem->free_frame_counter){
+        allocation[0] = 0;
+        printf("Not enough Physical memory!\n");
+        return allocation;
     }
 
     // pop frames from the free frame stack and allocate them
@@ -152,6 +161,9 @@ int* _calloc(struct logical_memory* logical_mem, struct physical_memory* physica
     }
     // print_page_table(process);
 
+    process->no_of_frames_allocated = frames_needed;
+
+
     // Update the frames in physical memory
     for(int i = 0; i < frames_needed; i++){
         physical_mem->frames[allocated_frames[i]].allocated = 1;
@@ -165,6 +177,7 @@ int* _calloc(struct logical_memory* logical_mem, struct physical_memory* physica
     return allocation;
 
 }
+
 
 
 
