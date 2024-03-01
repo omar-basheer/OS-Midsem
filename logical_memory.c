@@ -146,16 +146,40 @@ int* _calloc(struct logical_memory* logical_mem, struct physical_memory* physica
     }
 
     // Update the page table for the process
-    for(int i = 0; i < frames_needed; i++){
-        process->page_table->page_table_entry[i].frame_number = allocated_pages[i];
-        process->page_table->page_table_entry[i].valid = 1;
+    // for(int i = 0; i < frames_needed; i++){
+    //     process->page_table->page_table_entry[i].frame_number = allocated_pages[i];
+    //     process->page_table->page_table_entry[i].valid = 1;
+    // }
+
+
+    // Update the page table for the process
+    int assigned_pages = 0;
+    int i = 0;
+    while(assigned_pages < frames_needed){
+        if(process->page_table->page_table_entry[i].valid == 0){
+            process->page_table->page_table_entry[i].frame_number = allocated_pages[i];
+            process->page_table->page_table_entry[i].valid = 1;
+            assigned_pages++;
+        }
+        i++;    
     }
-    // print_page_table(process);
 
     // Update the frames in physical memory
-    for(int i = 0; i < frames_needed; i++){
-        physical_mem->frames[allocated_frames[i]].allocated = 1;
+    int assigned_frames = 0;
+    printf("assigned_frames: %d\n", assigned_frames);
+    i = 0;
+    while(assigned_frames < frames_needed){
+        if(physical_mem->frames[allocated_frames[i]].allocated == false){
+            physical_mem->frames[allocated_frames[i]].allocated = 1;
+            assigned_frames++;
+        }
+        i++;
     }
+    printf("assigned_frames: %d\n", assigned_frames);
+    
+    // for(int i = 0; i < frames_needed; i++){
+    //     physical_mem->frames[allocated_frames[i]].allocated = 1;
+    // }
 
     // Update return value
     allocation[0] = 1;

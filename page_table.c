@@ -39,7 +39,7 @@ void initialize_page_table(struct Process* process) {
 
     for (int i = 0; i< NUM_PAGES; i++){
         process->page_table->page_table_entry[i].frame_number = -1;
-        process->page_table->page_table_entry[i].valid = 2;
+        process->page_table->page_table_entry[i].valid = 0;
     }
     hierarchical_page_table[index] = process->page_table;
 }
@@ -62,7 +62,7 @@ void print_page_table(struct Process* process) {
     printf("Process %d: Size %d, Request Limit %d\n", process->process_id, process->process_size, process->process_request_limit);
     printf("Page table:\n");
     for (int i = 0; i < NUM_PAGES; i++) {
-        printf("Page %d: Frame %d\n", i, process->page_table->page_table_entry[i].frame_number);
+        printf("Page %d: Frame %d | Valid %d\n", i, process->page_table->page_table_entry[i].frame_number, process->page_table->page_table_entry[i].valid);
         // printf("Page %d: Frame %d\n", i, process->page_table[i].page_table_entry->frame_number);
     }
 }
@@ -76,7 +76,7 @@ void visualize_hierarchical_page_table() {
             printf("Page Table Entry %d:\n", i);
             // Iterate over each page table entry in this level
             for (int j = 0; j < NUM_PAGES; j++) {
-                printf("Page %d: Frame %d\n", j, hierarchical_page_table[i]->page_table_entry[j].frame_number);
+                printf("   Page %d: Frame %d | Valid %d\n", j, hierarchical_page_table[i]->page_table_entry[j].frame_number, hierarchical_page_table[i]->page_table_entry[j].valid);
             }
         } else {
             printf("Page Table Entry  %d: Not initialized\n", i);
