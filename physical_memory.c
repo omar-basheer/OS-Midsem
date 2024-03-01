@@ -73,7 +73,7 @@ void visualize_physical_memory(struct physical_memory *mem) {
  */
 void handle_page_fault(int page_number, struct Process* process) {
     // Check if the page is already in physical memory
-    if (process->page_table->page_table_entry->valid) {
+    if (process->page_table->page_table_entry[page_number].valid) {
         printf("Page %d is already in physical memory (No page fault)\n", page_number);
     } else {
         printf("Page Fault! Page%d not in physical memory\n", page_number);
