@@ -150,11 +150,11 @@ int* _calloc(struct logical_memory* logical_mem, struct physical_memory* physica
         process->page_table[i].page_table_entry->frame_number = allocated_pages[i];
         process->page_table[i].page_table_entry->valid = 1;
     }
+    print_page_table(process);
 
     // Update the frames in physical memory
     for(int i = 0; i < frames_needed; i++){
         physical_mem->frames[allocated_frames[i]].allocated = 1;
-        
     }
 
     // Update return value

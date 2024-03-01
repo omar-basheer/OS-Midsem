@@ -25,7 +25,7 @@ extern struct PageTable* hierarchical_page_table[NUM_PAGES];
 // extern struct PageTableEntry page_table[NUM_PAGES];
 void initialize_page_table(struct Process* process);
 void print_page_table(struct Process* process);
-void visualize_hierarchical_page_table();
+void visualize_hierarchical_page_table(struct Process* process);
 struct PageTable* access_process_page_table(struct Process *process);
 
 #endif /* PAGE_TABLE_H */

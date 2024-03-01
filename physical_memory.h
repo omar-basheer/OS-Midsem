@@ -11,7 +11,7 @@
 #define FRAME_SIZE 5
 #define NUM_PAGES 7
 #define PAGE_SIZE 5
-#define MEMORY_SIZE (FRAME_SIZE * NUM_PAGES)
+#define MEMORY_SIZE (FRAME_SIZE * NUM_FRAMES)
 
 typedef int bool;
 #define true 1

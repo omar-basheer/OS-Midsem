@@ -36,6 +36,17 @@ void initialize_page_table(struct Process* process) {
         printf("Error: Memory allocation failed\n");
         return;
     }
+    // hierarchical_page_table[index]->page_table_entry = (struct PageTableEntry*)malloc(NUM_PAGES * sizeof(struct PageTableEntry));
+    // if (hierarchical_page_table[index]->page_table_entry == NULL) {
+    //     printf("Error: Memory allocation failed\n");
+    //     return;
+    // }
+
+
+    // for (int i = 0; i< NUM_PAGES; i++){
+    //     process->page_table[i].page_table_entry->frame_number = -1;
+    //     process->page_table[i].page_table_entry->valid = 0;
+    // }
 
     for (int i = 0; i < NUM_PAGES; i++) {
         hierarchical_page_table[index]->page_table_entry[i].frame_number = -1;
@@ -69,20 +80,20 @@ void print_page_table(struct Process* process) {
     }
 }
 
-void visualize_hierarchical_page_table() {
+void visualize_hierarchical_page_table(struct Process* process) {
     printf("Hierarchical Page Table:\n");
 
     // Iterate over each level of the hierarchical page table
     for (int i = 0; i < NUM_PAGES; i++) {
         if (hierarchical_page_table[i] != NULL) {
-            printf("Level %d:\n", i);
-
+            printf("Page Table Entry %d:\n", i);
             // Iterate over each page table entry in this level
             for (int j = 0; j < NUM_PAGES; j++) {
                 printf("Page %d: Frame %d\n", j, hierarchical_page_table[i]->page_table_entry[j].frame_number);
+                // printf("Page %d: Frame %d\n", j, process->page_table[j].page_table_entry->frame_number);
             }
         } else {
-            printf("Level %d: Not initialized\n", i);
+            printf("Page Table Entry  %d: Not initialized\n", i);
         }
     }
 }

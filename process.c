@@ -33,7 +33,8 @@ struct Process* create_processes(int num_processes, int max_memory_size) {
     
     for (int i = 0; i < num_processes; i++) {
         processes[i].process_id = i;
-        processes[i].process_size = generate_random_size(max_memory_size);
+        // processes[i].process_size = generate_random_size(max_memory_size);
+        processes[i].process_size = 25;
         processes[i].process_request_limit = rand() % 5 + 1;
         processes[i].requested_memory_size = 0;
         initialize_page_table(&processes[i]);
@@ -57,10 +58,11 @@ void process_request_memory(struct Process* process, int requested_memory_size, 
 
         int allocated_size = calloc[2];
         int status = calloc[0];
-        printf("Status -> %d \n",status);
+        int num_pages = calloc[1];
+        printf("\n Status -> %d \n",status);
 
         if(status == 1) {
-            printf("Process %d: Requested memory successfully allocated (%d Bytes)\n", process->process_id, allocated_size);
+            printf("Process %d, Size %d: Requested memory successfully. \n Allocated (%d Bytes -> %d Page(s) )\n", process->process_id, process->process_size, allocated_size, num_pages);
             process->process_request_limit--;
             process->requested_memory_size = requested_memory_size; // Update requested memory size
         } else {
