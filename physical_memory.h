@@ -41,6 +41,8 @@ void visualize_physical_memory(struct physical_memory *mem);
 // void allocate_process_frame(struct physical_memory *mem, struct Process *process);
 // void deallocate_process_frame(struct physical_memory *mem, struct Process *process);
 
+
+
 #endif // PHYSICAL_MEMORY_H
 
 

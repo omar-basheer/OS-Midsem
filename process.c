@@ -4,6 +4,9 @@
 #include <stdlib.h>
 #include "process.h"
 #include "page_table.h"
+
+#include <unistd.h>
+
 // #include "logical_memory.h"
 // #include "physical_memory.h"
 
@@ -38,6 +41,12 @@ struct Process*   create_processes(int num_processes, int max_memory_size) {
         processes[i].process_request_limit = rand() % 5 + 1;
         processes[i].requested_memory_size = 1;
         initialize_page_table(&processes[i]);
+
+        processes->no_of_frames_allocated=0;
+        processes[i].total_memory_accesses = 0;
+        processes[i].total_hits = 0;
+        processes[i].total_misses = 0;
+
     }
     return processes;
 }
@@ -70,14 +79,76 @@ void process_request_memory(struct Process* process, int requested_memory_size, 
     }
 }
 
-void process_request_extra_memory(struct Process* process, int requested_memory_size, struct logical_memory* logical_mem, struct physical_memory* physical_mem, struct PageTable* hierarchical_page_table[NUM_PAGES]) {
-    
+/** Translates a virtual address to a physical addrss
+ *
+ * @param process Takes a pointer to a process
+ * @param page_number Takes the virtual address/page number
+ * @return returns the translated addresss
+ */
+int translate_address(struct Process* process, int page_number){
+    return process->page_table->page_table_entry[page_number].frame_number;
+}
+
+/** Executes a process with varying access patterns
+ *
+ * @param process A pointer to the process that is to be executed
+ */
+void execute_process(struct Process* process) {
+    int no_of_frames = process->no_of_frames_allocated;
+
+    // Randomly Decicde access pattern
+    int access_pattern = rand() % 2 + 1;;
+
+    // Access using sequential access
+    if (access_pattern == 1) {
+    for (int i = 0; i < no_of_frames; i++) {
+        if(translate_address(process,i) > 0){ //page hit
+            process->total_memory_accesses++;
+            process->total_hits++;
+            sleep(0.25);
+        } else{ //page fault
+            process->total_memory_accesses++;
+            process->total_misses++;
+        }
+    }
+    // Access memory 1.5 times
+        } else{
+        for (int i = 0; i < no_of_frames*1.5; i++) {
+            if(translate_address(process,i) > 0){ //page hit
+                process->total_memory_accesses++;
+                process->total_hits++;
+                sleep(0.25);
+            } else{ //page fault
+                process->total_memory_accesses++;
+                process->total_misses++;
+            }
+        }
+    }
+
+
+    printf("\n Process Execution Complete \n");
+    process_stats(process); // Calculate and display process stats
+
+}
+
+void process_stats(struct Process* process){
+    int total_accesses = process->total_memory_accesses;
+    float hit_rate = (process->total_hits/total_accesses) * 100;
+    float miss_rate = (process->total_misses/total_accesses) * 100;
+
+    printf("Process %d Statistics: \n",process->process_id);
+    printf("Total Memory Access Attempts: %d\n",total_accesses);
+    printf("Hit Rate: %f \n",hit_rate);
+    printf("Miss Rate: %f \n \n",miss_rate);
 }
 
 // Function to free allocated memory for processes
 void free_processes(struct Process* processes) {
     free(processes);
 }
+
+
+
 
 
 
