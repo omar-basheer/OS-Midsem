@@ -48,3 +48,10 @@
 197	333	7310242973147141	CMakeFiles/OS_Midsem.dir/page_table.c.obj	4e6a42315590ee81
 236	386	7310242973685699	CMakeFiles/OS_Midsem.dir/process.c.obj	92a7eabdaabcf861
 386	567	7310242975431044	OS_Midsem.exe	3fa6aa7c0d833cea
+5	391	7310276313135383	CMakeFiles/OS_Midsem.dir/main.c.obj	84aa138e073dd477
+0	460	7310276313833510	CMakeFiles/OS_Midsem.dir/logical_memory.c.obj	e7d411fc59f97c5b
+13	305	7310276411740540	CMakeFiles/OS_Midsem.dir/process.c.obj	92a7eabdaabcf861
+3	407	7310276412847591	CMakeFiles/OS_Midsem.dir/physical_memory.c.obj	e2ec548a2862588f
+4	127	7310276584780609	CMakeFiles/OS_Midsem.dir/physical_memory.c.obj	e2ec548a2862588f
+3	124	7310278457894773	CMakeFiles/OS_Midsem.dir/page_table.c.obj	4e6a42315590ee81
+124	391	7310278460507802	OS_Midsem.exe	3fa6aa7c0d833cea
