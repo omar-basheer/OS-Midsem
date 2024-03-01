@@ -113,7 +113,7 @@ int* _calloc(struct logical_memory* logical_mem, struct physical_memory* physica
 
     // check if available resources are greater than process need
     if(frames_needed > logical_mem->free_page_counter || frames_needed > physical_mem->free_frame_counter){
-        printf("Not enough resources");
+        printf("Not enough resources\n");
         return allocation;
     }
 
@@ -147,10 +147,10 @@ int* _calloc(struct logical_memory* logical_mem, struct physical_memory* physica
 
     // Update the page table for the process
     for(int i = 0; i < frames_needed; i++){
-        process->page_table[i].page_table_entry->frame_number = allocated_pages[i];
-        process->page_table[i].page_table_entry->valid = 1;
+        process->page_table->page_table_entry[i].frame_number = allocated_pages[i];
+        process->page_table->page_table_entry[i].valid = 1;
     }
-    print_page_table(process);
+    // print_page_table(process);
 
     // Update the frames in physical memory
     for(int i = 0; i < frames_needed; i++){

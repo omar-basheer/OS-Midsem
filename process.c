@@ -34,9 +34,9 @@ struct Process* create_processes(int num_processes, int max_memory_size) {
     for (int i = 0; i < num_processes; i++) {
         processes[i].process_id = i;
         // processes[i].process_size = generate_random_size(max_memory_size);
-        processes[i].process_size = 25;
+        processes[i].process_size = 12;
         processes[i].process_request_limit = rand() % 5 + 1;
-        processes[i].requested_memory_size = 0;
+        processes[i].requested_memory_size = 1;
         initialize_page_table(&processes[i]);
     }
     return processes;
@@ -49,7 +49,7 @@ struct Process* create_processes(int num_processes, int max_memory_size) {
  * @param requested_memory_size The size of memory requested by the process.
  * @param mem Instance of the logical memory struct
  */
-void process_request_memory(struct Process* process, int requested_memory_size, struct logical_memory* logical_mem, struct physical_memory* physical_mem) {
+void process_request_memory(struct Process* process, int requested_memory_size, struct logical_memory* logical_mem, struct physical_memory* physical_mem, struct PageTable* hierarchical_page_table[NUM_PAGES]) {
 //    if (process->process_request_limit > 0 && requested_memory_size <= process->process_size) {
 
         printf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> \n");
@@ -59,7 +59,7 @@ void process_request_memory(struct Process* process, int requested_memory_size, 
         int allocated_size = calloc[2];
         int status = calloc[0];
         int num_pages = calloc[1];
-        printf("\n Status -> %d \n",status);
+        printf("Status -> %d \n",status);
 
         if(status == 1) {
             printf("Process %d, Size %d: Requested memory successfully. \n Allocated (%d Bytes -> %d Page(s) )\n", process->process_id, process->process_size, allocated_size, num_pages);

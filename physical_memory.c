@@ -61,7 +61,7 @@ void initialize_physical_memory(struct physical_memory *mem){
 // }
 
 void visualize_physical_memory(struct physical_memory *mem) {
-    printf("Physical Memory :\n");
+    printf("\nPhysical Memory :\n");
 
     // Header row
     printf("     | Frame Size |  Num Frames |    Free Frames   | Allocated Frames\n");

@@ -30,19 +30,16 @@ int main(){
 
   // Create processes
   struct Process* processes = create_processes(num_processes, max_memory_size);
-  // visualize_hierarchical_page_table();  
+  visualize_hierarchical_page_table();  
 
   for (int i = 0; i < num_processes; i++) {
       // Allocate memory to each process
-      printf("Requesting memory");
+      printf("\nRequesting memory");
       // sleep(2);
-      process_request_memory(&processes[i], (int) processes[i].process_size , logical_memory, physical_memory);
-      visualize_hierarchical_page_table(&processes[i]);
+      process_request_memory(&processes[i], (int) processes[i].process_size , logical_memory, physical_memory, hierarchical_page_table);
   }
   visualize_physical_memory(physical_memory);
   visualize_logical_memory(logical_memory);
+  visualize_hierarchical_page_table();
   
-
-
-
 }
