@@ -27,7 +27,7 @@ int generate_random_size(int max_size) {
  * @param max_memory_size The maximum memory size for each process.
  * @return A pointer to the array of processes.
  */
-struct Process* create_processes(int num_processes, int max_memory_size) {
+struct Process*   create_processes(int num_processes, int max_memory_size) {
     struct Process* processes = (struct Process*)malloc(num_processes * sizeof(struct Process));
     if (processes == NULL) {
         printf("Error: Memory allocation failed for processes\n");
@@ -37,7 +37,7 @@ struct Process* create_processes(int num_processes, int max_memory_size) {
     for (int i = 0; i < num_processes; i++) {
         processes[i].process_id = i;
         // processes[i].process_size = generate_random_size(max_memory_size);
-        processes[i].process_size = 12;
+        processes[i].process_size = 10;
         processes[i].process_request_limit = rand() % 5 + 1;
         processes[i].requested_memory_size = 1;
         initialize_page_table(&processes[i]);
@@ -141,7 +141,6 @@ void process_stats(struct Process* process){
     printf("Hit Rate: %f \n",hit_rate);
     printf("Miss Rate: %f \n \n",miss_rate);
 }
-
 
 // Function to free allocated memory for processes
 void free_processes(struct Process* processes) {

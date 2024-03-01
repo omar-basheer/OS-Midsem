@@ -21,18 +21,10 @@ void initialize_physical_memory(struct physical_memory *mem){
     // Initialize all frames as free and push them onto stack
     for (int i = 0; i < mem->no_of_frames; i++) {
         mem->frames[i].frame_number = i;
+        mem->frames[i].allocated = false;
         mem->free_frame_stack[++mem->free_stack_top] = i; // this is how we push onto the stack
     }
 }
-
-
-// int calculate_process_frames(struct Process *process){
-//     int process_size = process->process_size;
-//     // Use ceil() to round up the result
-//     int frame_allocation = (int)ceil((double)process_size + FRAME_SIZE - 1/ FRAME_SIZE);
-
-//     return frame_allocation;
-// }
 
 /**
  * Visualizes the physical memory by printing the contents of each frame.
@@ -41,30 +33,6 @@ void initialize_physical_memory(struct physical_memory *mem){
  * @param num_frames The number of frames in the physical memory.
  * @param frame_size The size of each frame in bytes.
  */
-// void visualize_physical_memory(const struct Frame* memory, int num_frames, int frame_size) {
-//     printf("Physical Memory (%d bytes per frame):\n", frame_size);
-
-//     // Header row
-//     printf("  | ");
-//     for (int i = 0; i < num_frames; i++) {
-//         printf("Frame %d | ", i);
-//     }
-//     printf("\n");
-//     printf("--+---------+---------+---------+---------+---------+--\n");
-
-//     // Content rows
-//     for (int i = 0; i < frame_size; i++) {
-//         printf("  |   ");
-//         for (int j = 0; j < num_frames; j++) {
-//             printf("%02X    |   ", memory[j].data); // Print data in hexadecimal format
-//         }
-//         printf("\n");
-//         }
-// }
-
-
-
-
 void visualize_physical_memory(struct physical_memory *mem) {
     printf("\nPhysical Memory :\n");
 
@@ -178,9 +146,26 @@ void deallocate_frame(struct physical_memory *mem, struct Process *process) {
 
 
 
+// void visualize_physical_memory(const struct Frame* memory, int num_frames, int frame_size) {
+//     printf("Physical Memory (%d bytes per frame):\n", frame_size);
 
+//     // Header row
+//     printf("  | ");
+//     for (int i = 0; i < num_frames; i++) {
+//         printf("Frame %d | ", i);
+//     }
+//     printf("\n");
+//     printf("--+---------+---------+---------+---------+---------+--\n");
 
-
+//     // Content rows
+//     for (int i = 0; i < frame_size; i++) {
+//         printf("  |   ");
+//         for (int j = 0; j < num_frames; j++) {
+//             printf("%02X    |   ", memory[j].data); // Print data in hexadecimal format
+//         }
+//         printf("\n");
+//         }
+// }
 
 
 // void memory_access(int address) {
