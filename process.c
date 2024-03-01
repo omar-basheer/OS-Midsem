@@ -1,15 +1,12 @@
+// process.c
 // Import Dependencies
 #include <stdio.h>
 #include <stdlib.h>
 #include "process.h"
 #include "page_table.h"
-<<<<<<< Updated upstream
-#include "logical_memory.h"
-=======
 #include <unistd.h>
 // #include "logical_memory.h"
 // #include "physical_memory.h"
->>>>>>> Stashed changes
 
 /**
  * Generates a random size within the specified maximum size.
@@ -30,24 +27,23 @@ int generate_random_size(int max_size) {
  */
 struct Process* create_processes(int num_processes, int max_memory_size) {
     struct Process* processes = (struct Process*)malloc(num_processes * sizeof(struct Process));
-
+    if (processes == NULL) {
+        printf("Error: Memory allocation failed for processes\n");
+        return NULL;
+    }
+    
     for (int i = 0; i < num_processes; i++) {
         processes[i].process_id = i;
-        processes[i].process_size = generate_random_size(max_memory_size);
+        // processes[i].process_size = generate_random_size(max_memory_size);
+        processes[i].process_size = 12;
         processes[i].process_request_limit = rand() % 5 + 1;
-<<<<<<< Updated upstream
-        processes[i].requested_memory_size = 0;
-        init_page_table(&processes[i]);
-=======
         processes[i].requested_memory_size = 1;
         initialize_page_table(&processes[i]);
         processes->no_of_frames_allocated=0;
         processes[i].total_memory_accesses = 0;
         processes[i].total_hits = 0;
         processes[i].total_misses = 0;
->>>>>>> Stashed changes
     }
-
     return processes;
 }
 
@@ -58,21 +54,20 @@ struct Process* create_processes(int num_processes, int max_memory_size) {
  * @param requested_memory_size The size of memory requested by the process.
  * @param mem Instance of the logical memory struct
  */
-void process_request_memory(struct Process* process, int requested_memory_size, struct logical_memory* mem) {
+void process_request_memory(struct Process* process, int requested_memory_size, struct logical_memory* logical_mem, struct physical_memory* physical_mem, struct PageTable* hierarchical_page_table[NUM_PAGES]) {
 //    if (process->process_request_limit > 0 && requested_memory_size <= process->process_size) {
 
         printf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> \n");
         // Request for memory
-        int* calloc = _calloc(mem, process);
-
+        int* calloc = _calloc(logical_mem, physical_mem, process);
 
         int allocated_size = calloc[2];
         int status = calloc[0];
+        int num_pages = calloc[1];
         printf("Status -> %d \n",status);
 
         if(status == 1) {
-            printf("Process %d: Requested memory successfully allocated (%d Bytes)\n", process->process_id,
-                   allocated_size);
+            printf("Process %d, Size %d: Requested memory successfully. \n Allocated (%d Bytes -> %d Page(s) )\n", process->process_id, process->process_size, allocated_size, num_pages);
             process->process_request_limit--;
             process->requested_memory_size = requested_memory_size; // Update requested memory size
         } else {
