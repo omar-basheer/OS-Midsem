@@ -115,7 +115,7 @@ int* _calloc(struct logical_memory* logical_mem, struct physical_memory* physica
     // check if available resources are greater than process need
     if(frames_needed > logical_mem->free_page_counter){
         printf("Not enough Virtual memory!\n");
-        return allocation;
+
     }
 
     // pop pages from the free stack and allocate them to the process
@@ -125,6 +125,7 @@ int* _calloc(struct logical_memory* logical_mem, struct physical_memory* physica
         logical_mem->free_stack_top--; //reduce top
         logical_mem->free_page_counter--;
     }
+
 
     // Checkk if enough pages are available
     if(frames_needed > physical_mem->free_frame_counter){
@@ -159,7 +160,9 @@ int* _calloc(struct logical_memory* logical_mem, struct physical_memory* physica
         process->page_table->page_table_entry[i].valid = 1;
     }
     // print_page_table(process);
+
     process->no_of_frames_allocated = frames_needed;
+
 
     // Update the frames in physical memory
     for(int i = 0; i < frames_needed; i++){
@@ -172,6 +175,7 @@ int* _calloc(struct logical_memory* logical_mem, struct physical_memory* physica
     allocation[2] = frames_needed * 4;
 
     return allocation;
+
 }
 
 

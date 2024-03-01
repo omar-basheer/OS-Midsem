@@ -4,7 +4,9 @@
 #include <stdlib.h>
 #include "process.h"
 #include "page_table.h"
+
 #include <unistd.h>
+
 // #include "logical_memory.h"
 // #include "physical_memory.h"
 
@@ -39,10 +41,12 @@ struct Process* create_processes(int num_processes, int max_memory_size) {
         processes[i].process_request_limit = rand() % 5 + 1;
         processes[i].requested_memory_size = 1;
         initialize_page_table(&processes[i]);
+
         processes->no_of_frames_allocated=0;
         processes[i].total_memory_accesses = 0;
         processes[i].total_hits = 0;
         processes[i].total_misses = 0;
+
     }
     return processes;
 }

@@ -6,6 +6,7 @@
 #include<stdlib.h>
 #include "physical_memory.h"
 
+
 /**
  * Initializes the physical memory by filling it with 0.
  * The memory size is defined by the constant MEMORY_SIZE.
@@ -23,6 +24,7 @@ void initialize_physical_memory(struct physical_memory *mem){
         mem->free_frame_stack[++mem->free_stack_top] = i; // this is how we push onto the stack
     }
 }
+
 
 // int calculate_process_frames(struct Process *process){
 //     int process_size = process->process_size;
@@ -59,6 +61,9 @@ void initialize_physical_memory(struct physical_memory *mem){
 //         printf("\n");
 //         }
 // }
+
+
+
 
 void visualize_physical_memory(struct physical_memory *mem) {
     printf("\nPhysical Memory :\n");
@@ -97,6 +102,53 @@ void visualize_physical_memory(struct physical_memory *mem) {
     printf("\n");
     printf("\n");
 }
+
+
+/**
+ * Handles page faults and uses the LRU page replacement algorithm.
+ *
+ * @param page_number The page number to allocate a frame for.
+ */
+void handle_page_fault(int page_number, struct Process* process) {
+    // Check if the page is already in physical memory
+    if (process->page_table->page_table_entry[page_number].valid) {
+        printf("Page %d is already in physical memory (No page fault)\n", page_number);
+    } else {
+        printf("Page Fault! Page%d not in physical memory\n", page_number);
+
+    }
+
+
+
+/**
+ * Deallocates a frame in physical memory and updates the page table.
+ *
+ */
+void deallocate_frame(struct physical_memory *mem, struct Process *process) {
+    if (mem->allocated_stack_top >= 0) {
+        // Deallocate a frame
+        int frame_number = mem->allocated_frame_stack[mem->allocated_stack_top--];
+        mem->free_frame_stack[++mem->free_stack_top] = frame_number;
+
+        // Update the page table to indicate that the frame is now free
+        struct Page *page_table = access_process_page_table(mem->current_process);
+        process->page_table->page_table_entry->frame_number = -1;
+        process->page_table->page_table_entry->valid = false;
+
+        mem->current_process = NULL;
+
+        // Update the counters
+        mem->free_frame_counter++;
+        printf("Deallocated Frame %d\n", frame_number);
+    } else {
+        printf("Error: No frames to allocate\n");
+
+    }
+
+    printf("\n");
+    printf("\n");
+}
+
 
 /**
  * Deallocates a frame in physical memory and updates the page table.
@@ -172,4 +224,6 @@ void visualize_physical_memory(struct physical_memory *mem) {
 //     }
 
 // }
+
+
 

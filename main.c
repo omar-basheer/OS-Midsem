@@ -12,6 +12,7 @@ int main(){
   int num_processes = 4;
   int max_memory_size = 69;
 
+
   struct physical_memory physical_memory_instance;
   struct physical_memory* physical_memory = &physical_memory_instance;
 
@@ -49,6 +50,7 @@ int main(){
   visualize_physical_memory(physical_memory);
   visualize_logical_memory(logical_memory);
   visualize_hierarchical_page_table();
+
 
 
   
