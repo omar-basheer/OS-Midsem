@@ -30,8 +30,9 @@ struct logical_memory {
 
 void initialize_logical_memory(struct logical_memory* mem);
 void visualize_logical_memory(struct logical_memory* mem);
-int calculate_frames(struct Process* process);
-int* _calloc(struct logical_memory* logical_mem, struct physical_memory* physical_mem, struct Process* process);
+// int calculate_frames(struct Process* process);
+int calculate_frames(int process_size);
+int* _calloc(struct logical_memory* logical_mem, struct physical_memory* physical_mem, struct Process* process, int requested_memory_size);
 
 // void allocate_memory(struct logical_memory* mem, struct Process* process);
 
