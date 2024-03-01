@@ -61,3 +61,32 @@ void print_page_table(struct Process* process) {
     }
 }
 
+<<<<<<< Updated upstream
+=======
+void visualize_hierarchical_page_table() {
+    printf("Hierarchical Page Table:\n");
+
+    // Iterate over each level of the hierarchical page table
+    for (int i = 0; i < NUM_PAGES; i++) {
+        if (hierarchical_page_table[i] != NULL) {
+            printf("Page Table Entry %d:\n", i);
+            // Iterate over each page table entry in this level
+            for (int j = 0; j < NUM_PAGES; j++) {
+                printf("                        Page %d: Frame %d\n", j, hierarchical_page_table[i]->page_table_entry[j].frame_number);
+            }
+        } else {
+            printf("Page Table Entry  %d: Not initialized\n", i);
+        }
+    }
+}
+/**
+ * Accesses the page table of a given process.
+ *
+ * @param process The process whose page table is to be accessed.
+ * @return A pointer to the page table of the process.
+ */
+struct PageTable* access_process_page_table(struct Process* process) {
+    return process->page_table;
+}
+
+>>>>>>> Stashed changes

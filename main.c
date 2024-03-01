@@ -22,6 +22,7 @@ int main(){
       print_page_table(&processes[i]);
 
       // Allocate memory to each process
+<<<<<<< Updated upstream
       printf("Requesting memory");
 //      sleep(2);
       process_request_memory(&processes[i], (int) processes[i].process_size ,&mem);
@@ -29,4 +30,24 @@ int main(){
 
   }
 
+=======
+      printf("\nRequesting memory");
+      // sleep(2);
+      process_request_memory(&processes[i], (int) processes[i].process_size , logical_memory, physical_memory, hierarchical_page_table);
+
+  }
+
+  // Execute processes
+  for(int i = 0; i < num_processes; i++){
+      printf("Executing Process: %d",i);
+      execute_process(&processes[i]);
+  }
+
+  visualize_physical_memory(physical_memory);
+  visualize_logical_memory(logical_memory);
+  visualize_hierarchical_page_table();
+
+
+  
+>>>>>>> Stashed changes
 }

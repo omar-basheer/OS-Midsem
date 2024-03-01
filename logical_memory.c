@@ -76,7 +76,8 @@ int calculate_pages(struct Process* process) {
  * @param mem The logical memory structure.
  * @param process The process structure.
  * @returns returns a pointer to an integer array of size 3. The first index contains the status
- * code indicating if memory was sucessfully allocated (1 for success, -1 for failure).
+ * code indicating if memory was sucessfully allocated (1 for success, -1 for failure, 0 if pages
+ * were assigned, but no frames assigned).
  * The second index contains the number of pages/frames allocated. The third index contains
  * the number of bytes allocated
  */
@@ -87,17 +88,44 @@ int* _calloc(struct logical_memory* mem, struct Process* process){
     int frames_needed = calculate_pages(process);
 
     // check if available resources are greater than process need
+<<<<<<< Updated upstream
     if(frames_needed > mem->free_page_counter){
         printf("Not enough resources");
         return &allocation;
+=======
+    if(frames_needed > logical_mem->free_page_counter){
+        printf("Not enough Virtual memory!\n");
+        return allocation;
+>>>>>>> Stashed changes
     }
 
     // pop pages from the free stack and allocate them to the process
     int allocated_pages[frames_needed];
     for(int i = 0; i < frames_needed; i++ ){
+<<<<<<< Updated upstream
         allocated_pages[i] = mem->free_page_stack[mem->free_stack_top]; //pop
         mem->free_stack_top--; //reduce top
         mem->free_page_counter--;
+=======
+        allocated_pages[i] = logical_mem->free_page_stack[logical_mem->free_stack_top]; //pop
+        logical_mem->free_stack_top--; //reduce top
+        logical_mem->free_page_counter--;
+    }
+
+    // Checkk if enough pages are available
+    if(frames_needed > physical_mem->free_frame_counter){
+        allocation[0] = 0;
+        printf("Not enough Physical memory!\n");
+        return allocation;
+    }
+
+    // pop frames from the free frame stack and allocate them
+    int allocated_frames[frames_needed];
+    for(int i = 0; i < frames_needed; i++ ){
+        allocated_frames[i] = physical_mem->free_frame_stack[physical_mem->free_stack_top]; //pop
+        physical_mem->free_stack_top--; //reduce top
+        physical_mem->free_frame_counter--;
+>>>>>>> Stashed changes
     }
 
     // push allocated pages onto the allocated stack
@@ -108,8 +136,20 @@ int* _calloc(struct logical_memory* mem, struct Process* process){
 
     // Update the page table for the process
     for(int i = 0; i < frames_needed; i++){
+<<<<<<< Updated upstream
         process->page_table[i].frame_number = allocated_pages[i];
         process->page_table[i].valid = 1;
+=======
+        process->page_table->page_table_entry[i].frame_number = allocated_pages[i];
+        process->page_table->page_table_entry[i].valid = 1;
+    }
+    // print_page_table(process);
+    process->no_of_frames_allocated = frames_needed;
+
+    // Update the frames in physical memory
+    for(int i = 0; i < frames_needed; i++){
+        physical_mem->frames[allocated_frames[i]].allocated = 1;
+>>>>>>> Stashed changes
     }
 
     // Update return value
@@ -117,9 +157,14 @@ int* _calloc(struct logical_memory* mem, struct Process* process){
     allocation[1] = frames_needed;
     allocation[2] = frames_needed * 4;
 
+<<<<<<< Updated upstream
     return &allocation;
 
+=======
+    return allocation;
+>>>>>>> Stashed changes
 }
+
 
 
 
