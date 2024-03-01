@@ -27,7 +27,7 @@ int generate_random_size(int max_size) {
  * @param max_memory_size The maximum memory size for each process.
  * @return A pointer to the array of processes.
  */
-struct Process*   create_processes(int num_processes, int max_memory_size) {
+struct Process* create_processes(int num_processes, int max_memory_size) {
     struct Process* processes = (struct Process*)malloc(num_processes * sizeof(struct Process));
     if (processes == NULL) {
         printf("Error: Memory allocation failed for processes\n");
@@ -102,10 +102,10 @@ void execute_process(struct Process* process) {
     // Access using sequential access
     if (access_pattern == 1) {
     for (int i = 0; i < no_of_frames; i++) {
-        if(translate_address(process,i) > 0){ //page hit
+        if(translate_address(process,i) >= 0){ //page hit
             process->total_memory_accesses++;
             process->total_hits++;
-            sleep(0.25);
+            sleep(1);
         } else{ //page fault
             process->total_memory_accesses++;
             process->total_misses++;
@@ -114,10 +114,10 @@ void execute_process(struct Process* process) {
     // Access memory 1.5 times
         } else{
         for (int i = 0; i < no_of_frames*1.5; i++) {
-            if(translate_address(process,i) > 0){ //page hit
+            if(translate_address(process,i) >= 0){ //page hit
                 process->total_memory_accesses++;
                 process->total_hits++;
-                sleep(0.25);
+                sleep(1);
             } else{ //page fault
                 process->total_memory_accesses++;
                 process->total_misses++;
@@ -132,14 +132,18 @@ void execute_process(struct Process* process) {
 }
 
 void process_stats(struct Process* process){
-    int total_accesses = process->total_memory_accesses;
+    float total_accesses = process->total_memory_accesses;
     float hit_rate = (process->total_hits/total_accesses) * 100;
     float miss_rate = (process->total_misses/total_accesses) * 100;
 
+    printf("\n");
     printf("Process %d Statistics: \n",process->process_id);
-    printf("Total Memory Access Attempts: %d\n",total_accesses);
+    printf("Total Memory Access Attempts: %f\n",total_accesses);
+    printf("Total Hits: %f \n",process->total_hits);
     printf("Hit Rate: %f \n",hit_rate);
+    printf("Total Misses: %f \n",process->total_misses);
     printf("Miss Rate: %f \n \n",miss_rate);
+
 }
 
 // Function to free allocated memory for processes

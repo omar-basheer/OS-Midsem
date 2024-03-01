@@ -26,9 +26,9 @@ struct Process{
 
     struct PageTable* page_table;
     int no_of_frames_allocated;
-    int total_memory_accesses;
-    int total_hits;
-    int total_misses;
+    float total_memory_accesses;
+    float total_hits;
+    float total_misses;
 
 };
     // struct PageTableEntry page_table[NUM_PAGES]; /**< The page table entries for the process. */

@@ -92,27 +92,27 @@ void handle_page_fault(int page_number, struct Process* process) {
  * Deallocates a frame in physical memory and updates the page table.
  *
  */
-// void deallocate_frame(struct physical_memory *mem, struct Process *process) {
-//     if (mem->allocated_stack_top >= 0) {
-//         // Deallocate a frame
-//         int frame_number = mem->allocated_frame_stack[mem->allocated_stack_top--];
-//         mem->free_frame_stack[++mem->free_stack_top] = frame_number;
+void deallocate_frame(struct physical_memory *mem, struct Process *process) {
+    if (mem->allocated_stack_top >= 0) {
+        // Deallocate a frame
+        int frame_number = mem->allocated_frame_stack[mem->allocated_stack_top--];
+        mem->free_frame_stack[++mem->free_stack_top] = frame_number;
 
-//         // Update the page table to indicate that the frame is now free
-//         struct Page *page_table = access_process_page_table(mem->current_process);
-//         process->page_table->page_table_entry->frame_number = -1;
-//         process->page_table->page_table_entry->valid = false;
+        // Update the page table to indicate that the frame is now free
+        struct Page *page_table = access_process_page_table(mem->current_process);
+        process->page_table->page_table_entry->frame_number = -1;
+        process->page_table->page_table_entry->valid = false;
 
-//         mem->current_process = NULL;
+        mem->current_process = NULL;
 
-//         // Update the counters
-//         mem->free_frame_counter++;
-//         printf("Deallocated Frame %d\n", frame_number);
-//     } else {
-//         printf("Error: No frames to allocate\n");
+        // Update the counters
+        mem->free_frame_counter++;
+        printf("Deallocated Frame %d\n", frame_number);
+    } else {
+        printf("Error: No frames to allocate\n");
 
-//     }
-// }
+    }
+}
 
 
 

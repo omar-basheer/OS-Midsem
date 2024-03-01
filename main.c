@@ -34,9 +34,7 @@ int main(){
   visualize_hierarchical_page_table();  
 
   for (int i = 0; i < num_processes; i++) {
-      // Allocate memory to each process
       printf("\nRequesting memory");
-      // sleep(2);
       process_request_memory(&processes[i], (int) processes[i].process_size , logical_memory, physical_memory, hierarchical_page_table);
 
   }
