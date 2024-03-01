@@ -36,7 +36,17 @@ int main(){
   for (int i = 0; i < num_processes; i++) {
       printf("\nRequesting memory");
       process_request_memory(&processes[i], (int) processes[i].process_size , logical_memory, physical_memory, hierarchical_page_table);
+  }
 
+  // Execute processes
+  for(int i = 0; i < num_processes; i++){
+      printf("Executing Process: %d",i);
+      execute_process(&processes[i]);
+  }
+
+  for (int i = 0; i < num_processes; i++) {
+      printf("\nRequesting additional memory");
+      process_request_memory(&processes[i], (int) processes[i].process_size , logical_memory, physical_memory, hierarchical_page_table);
   }
 
   // Execute processes

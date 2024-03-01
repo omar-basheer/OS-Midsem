@@ -37,12 +37,13 @@ struct Process* create_processes(int num_processes, int max_memory_size) {
     for (int i = 0; i < num_processes; i++) {
         processes[i].process_id = i;
         // processes[i].process_size = generate_random_size(max_memory_size);
-        processes[i].process_size = 10;
+        processes[i].process_size = 5;
         processes[i].process_request_limit = rand() % 5 + 1;
         processes[i].requested_memory_size = 1;
         initialize_page_table(&processes[i]);
-
-        processes->no_of_frames_allocated=0;
+        processes[i].requested = 0;
+        processes[i].extra = 1;
+        processes[i].no_of_frames_allocated=0;
         processes[i].total_memory_accesses = 0;
         processes[i].total_hits = 0;
         processes[i].total_misses = 0;
@@ -59,22 +60,42 @@ struct Process* create_processes(int num_processes, int max_memory_size) {
  * @param mem Instance of the logical memory struct
  */
 void process_request_memory(struct Process* process, int requested_memory_size, struct logical_memory* logical_mem, struct physical_memory* physical_mem, struct PageTable* hierarchical_page_table[NUM_PAGES]) {
-//    if (process->process_request_limit > 0 && requested_memory_size <= process->process_size) {
+    printf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> \n");
+    if (process->requested == 1){
+        if (process->extra == 0) {
+            printf("Process %d: No extra memory needed.\n", process->process_id);
+            perform_memory_allocation(logical_mem, physical_mem, process, requested_memory_size);
+            return;
+        }else{
+            // Generate a random number to add to the current process size
+            int extra_memory = rand() % 10;
+            printf("Process %d: Size: %d Requesting exta memory of size %d\n", process->process_id, process->process_size, 5);
+            requested_memory_size = 5;
+            perform_memory_allocation(logical_mem, physical_mem, process, requested_memory_size);
+        }
+        // printf("Process %d: Size: %d Requesting exta memory of size %d\n", process->process_id, extra_memory, requested_memory_size-extra_memory);
+        // requested_memory_size += extra_memory;
+    }
+    perform_memory_allocation(logical_mem, physical_mem, process, requested_memory_size);
+}
 
-        printf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> \n");
-        // Request for memory
-        int* calloc = _calloc(logical_mem, physical_mem, process);
+void perform_memory_allocation(struct logical_memory* logical_mem, struct physical_memory* physical_mem, struct Process* process, int requested_memory_size) {
+    // Perform memory allocation
+    int* calloc_result = _calloc(logical_mem, physical_mem, process, requested_memory_size);
 
-        int allocated_size = calloc[2];
-        int status = calloc[0];
-        int num_pages = calloc[1];
-        printf("Status -> %d \n",status);
+    // Extract the relevant information from the allocation result
+    int allocated_size = calloc_result[2];
+    int status = calloc_result[0];
+    int num_pages = calloc_result[1];
 
-        if(status == 1) {
-            printf("Process %d, Size %d: Requested memory successfully. \n Allocated (%d Bytes -> %d Page(s) )\n", process->process_id, process->process_size, allocated_size, num_pages);
-            process->process_request_limit--;
-            process->requested_memory_size = requested_memory_size; // Update requested memory size
-        } else {
+    // Print status message
+    printf("Status -> %d\n", status);
+    if (status == 1) {
+        printf("Process %d, Size %d: Requested memory successfully.\nAllocated (%d Bytes -> %d Page(s))\n", process->process_id, process->process_size, allocated_size, num_pages);
+        process->process_request_limit--;
+        process->requested_memory_size = requested_memory_size; // Update requested memory size
+        process->requested = 1;
+    } else {
         printf("Process %d: Memory request failed.\n", process->process_id);
     }
 }
@@ -101,18 +122,18 @@ void execute_process(struct Process* process) {
 
     // Access using sequential access
     if (access_pattern == 1) {
-    for (int i = 0; i < no_of_frames; i++) {
-        if(translate_address(process,i) >= 0){ //page hit
-            process->total_memory_accesses++;
-            process->total_hits++;
-            sleep(1);
-        } else{ //page fault
-            process->total_memory_accesses++;
-            process->total_misses++;
+        for (int i = 0; i < no_of_frames; i++) {
+            if(translate_address(process,i) >= 0){ //page hit
+                process->total_memory_accesses++;
+                process->total_hits++;
+                sleep(1);
+            } else{ //page fault
+                process->total_memory_accesses++;
+                process->total_misses++;
+            }
         }
-    }
     // Access memory 1.5 times
-        } else{
+    } else{
         for (int i = 0; i < no_of_frames*1.5; i++) {
             if(translate_address(process,i) >= 0){ //page hit
                 process->total_memory_accesses++;
@@ -152,7 +173,22 @@ void free_processes(struct Process* processes) {
 }
 
 
+        // Request for memory
+        // int* calloc = _calloc(logical_mem, physical_mem, process);
 
+        // int allocated_size = calloc[2];
+        // int status = calloc[0];
+        // int num_pages = calloc[1];
+        // printf("Status -> %d \n",status);
+
+        // if(status == 1) {
+        //     printf("Process %d, Size %d: Requested memory successfully. \n Allocated (%d Bytes -> %d Page(s) )\n", process->process_id, process->process_size, allocated_size, num_pages);
+        //     process->process_request_limit--;
+        //     process->requested_memory_size = requested_memory_size; // Update requested memory size
+        //     process->requested = 1;
+        // } else {
+        // printf("Process %d: Memory request failed.\n", process->process_id);
+        // }
 
 
 
